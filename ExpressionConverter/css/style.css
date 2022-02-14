@@ -1,0 +1,28 @@
+body{
+    background-color: rgb(71, 62, 62) !important;
+}
+
+h2{
+    text-align: center;
+    color: aliceblue;
+    font-size: xx-large;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+div.container{
+    max-width: 450px;
+    max-height: 600px;
+}
+
+div.content{
+    width: 410px; 
+    height: 550px; 
+    border: 2px solid white;
+}
+
+div.rel-left{
+    position: relative;
+    float: left;
+    margin-right: 5px;
+    margin-left: 5px;
+}

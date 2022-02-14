@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" data-name="min/vs/editor/editor.main" href="monaco/min/vs/editor/editor.main.css" />
+    <title>expression-converter</title>
+    
+    </head>
+<body>
+    
+
+    <div class="container rel-left">
+        <h2>JS/Json</h2>
+        <div id="json" class="content"></div>
+    </div>
+
+
+    <div class="container rel-left">
+        <h2>IDD Pré</h2>
+        <div id="idd-pre" class="content"></div>
+    </div>
+
+    <div class="container rel-left">
+        <h2>IDD String</h2>
+        <div id="idd-pos" class="content"></div>
+    </div>
+
+    <!--Importar o monaco editor-->
+    <script>var require = { paths: { vs: 'monaco/min/vs' } };</script>
+    <script src="monaco/min/vs/loader.js"></script>
+    <script src="monaco/min/vs/editor/editor.main.nls.js"></script>
+    <script src="monaco/min/vs/editor/editor.main.js"></script>
+
+    <!--Imports do projeto-->
+    <script src="js/utils.js"></script>
+    <script src="js/JSONParser.js"></script>
+    <script src="js/IDDPosParser.js"></script>
+    <script src="js/IDDPreParser.js"></script>
+    <script src="js/UIContoller.js"></script>
+    <script src="js/StateController.js"></script>
+    <script src="js/PreLoadRsrc.js"></script>
+  
+    <script>
+        initializeEditors();
+        initializeObservers();
+    </script>
+</body>
+</html>

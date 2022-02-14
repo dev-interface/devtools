@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+  </head>
+  <body>
+	  <div class="title-text">
+        <h1>Dev Tools<br>Portifólio</h1>
+        <p style="color: white; font-style: italic; font-family:Times New Roman;">Scrolle a página!</p>
+    </div>
+    
+    <div id="0" class="card" onmouseover="over(0)" onmouseout="out(0)">
+      <div class="card-image" ></div>
+        <div class="card-text">
+          <span class="date">Janeiro de 2022</span>
+            <h2>API - Speech to text</h2>
+            <p>Transcrição de audio em texto</p>
+		    <button><a id="button" href="https://jhonatanstarley.github.io/Web-Speech-API-Reconhecimento-de-voz-com-JavaScript/" target="blank_">Testar</a></button>
+      </div>
+    </div>
+    <div id="1" class="card" onmouseover="over(1)" onmouseout="out(1)">
+      <div class="card-image card2"></div>
+        <div class="card-text card2">
+          <span class="date">Fevereiro de 2022</span>
+            <h2>What's App View</h2>
+          <p>Logview - IDD | What's App view <br><b style="color: white;">Powered by Daniel Ferraz</b></p>
+        <button><a id="button" href="./WhatsappView/dist.html" target="blank_">Testar</a></button>
+      </div>
+    </div>
+    <div id="2" class="card" onmouseover="over(2)" onmouseout="out(2)">
+        <div class="card-image card3"></div>
+          <div class="card-text card3">
+            <span class="date">Novembro de 2021</span>
+              <h2>Formatter</h2>
+              <p>Formatar o texto do SAC para os tickets do Zendesk</p>
+              <button><a id="button" href="./Formater/index.html" target="blank_">Testar</a></button>
+          </div>
+    </div>
+    <div id="3" class="card" onmouseover="over(3)" onmouseout="out(3)">
+      <div class="card-image" ></div>
+        <div class="card-text">
+          <span class="date">2021</span>
+            <h2>Converter Expressions</h2>
+            <p>Converte json, string, listas e linhas<br><b style="color: white;">Powered by Daniel Ferraz</b></p>
+		    <button><a id="button" href="./ExpressionConverter/main.html" target="blank_">Testar</a></button>
+      </div>
+    </div>
+    <div id="4" class="card" onmouseover="over(4)" onmouseout="out(4)">
+      <div class="card-image card2"></div>
+        <div class="card-text card2">
+          <span class="date">2022</span>
+            <h2>Next post</h2>
+          <p>Próximo post em breve</p>
+        <button><a id="button" href="" target="blank_">Testar</a></button>
+      </div>
+    </div>
+    <div id="5" class="card" onmouseover="over(5)" onmouseout="out(5)">
+        <div class="card-image card3"></div>
+          <div class="card-text card3">
+            <span class="date">2022</span>
+              <h2>Next post</h2>
+              <p>Próximo post em breve</p>
+              <button><a id="button" href="" target="blank_">Testar</a></button>
+          </div>
+    </div>
+    <script src="./js/vanilla-tilt.min.js"></script>
+    <script>
+      VanillaTilt.init(document.querySelectorAll(".card"),{
+        glare: true,
+        reverse: true,
+        "max-glare": 0.15
+      });
+    </script>
+  </body>
+  <script>
+    function over(val){
+      document.getElementById(val).className = 'card rgb';
+    }
+    function out(val){
+      document.getElementById(val).className = 'card';
+    }
+  </script>
+  <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js?ver=1.3.2'></script>
+  <script type='text/javascript' src='./js/jquery.mousewheel.min.js'></script>
+  
+  <script>
+$(document).ready(function() {
+$('html, body, *').mousewheel(function(e, delta) {
+this.scrollLeft -= (delta * 30);
+e.preventDefault();
+});
+});
+  </script> 
+</html>
