@@ -4,9 +4,25 @@
     <meta charset="UTF-8" />
     <link rel="stylesheet" type="text/css" href="./css/styles.css" />
     <link rel="shortcut icon" type="image/x-icon" href="./img/favicon-whiteV2.png" id="favicon-scheme">
-	<title>>_Dev Tools</title>
+    <title>$ &nbsp;&nbsp;&nbsp;Dev Tools</title>
+    <script async>
+      function title() {
+        const title = document.querySelector('title').innerHTML;
+        const titlePage = document.querySelector('h1').innerHTML;
+        if (title == '$ &nbsp;&nbsp;&nbsp;Dev Tools' && titlePage == '&gt;&nbsp;&nbsp;Dev Tools<br style="">Portifólio') {
+          document.querySelector('title').innerHTML = '$ |&nbsp&nbsp;Dev Tools';
+          document.querySelector('h1').innerHTML = '&gt;|&nbsp;Dev Tools<br style="">Portifólio';
+        }
+        else{
+          document.querySelector('title').innerHTML = '$ &nbsp;&nbsp;&nbsp;Dev Tools';
+          document.querySelector('h1').innerHTML = '&gt;&nbsp;&nbsp;Dev Tools<br style="">Portifólio';
+        }
+        setTimeout("title()", 700);
+      }
+      
+    </script>
   </head>
-  <body>
+  <body onload="title()">
 	  <div class="title-text">
         <h1>Dev Tools<br>Portifólio</h1>
         <p style="color: white; font-style: italic; font-family:Times New Roman;">Scrolle a página!</p>
