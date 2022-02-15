@@ -1,20 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="ptBR">
   <head>
     <meta charset="UTF-8" />
     <link rel="stylesheet" type="text/css" href="./css/styles.css" />
     <link rel="shortcut icon" type="image/x-icon" href="./img/favicon-whiteV2.png" id="favicon-scheme">
     <title>$ &nbsp;&nbsp;&nbsp;Dev Tools</title>
-	  <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js?ver=1.3.2'></script>
-  <script type='text/javascript' src='/js/jquery.mousewheel.min.js'></script>
-  <script>
-    $(document).ready(function() {
-    $('html, body, *').mousewheel(function(e, delta) {
-      this.scrollLeft -= (delta * 30);
-    e.preventDefault();
-    });
-  });
-  </script> 
     <script>
       function title() {
         const title = document.querySelector('title').innerHTML;
@@ -34,7 +24,7 @@
   </head>
   <body onload="title()">
 	  <div class="title-text">
-        <h1>Dev Tools<br>Portifólio</h1>
+        <h1>&gt;&nbsp;&nbsp;Dev Tools<br>Portifólio</h1>
         <p style="color: white; font-style: italic; font-family:Times New Roman;">Scrolle a página!</p>
     </div>
     
@@ -109,4 +99,14 @@
       document.getElementById(val).className = 'card';
     }
   </script>
+  <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js?ver=1.3.2'></script>
+  <script type='text/javascript' src='/js/jquery.mousewheel.min.js'></script>
+  <script>
+    $(document).ready(function() {
+    $('html, body, *').mousewheel(function(e, delta) {
+      this.scrollLeft -= (delta * 30);
+    e.preventDefault();
+    });
+  });
+  </script> 
 </html>
