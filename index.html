@@ -81,15 +81,15 @@
       document.getElementById(val).className = 'card';
     }
   </script>
-  <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js?ver=1.3.2'></script>
-  <script type='text/javascript' src='./js/jquery.mousewheel.min.js'></script>
-  
+  <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js?ver=1.3.2'></script>
+  <script type='text/javascript' src='/js/jquery.mousewheel.min.js'></script>
+
   <script>
-$(document).ready(function() {
-$('html, body, *').mousewheel(function(e, delta) {
-this.scrollLeft -= (delta * 30);
-e.preventDefault();
-});
-});
+    $(document).ready(function() {
+    $('html, body, *').mousewheel(function(e, delta) {
+      this.scrollLeft -= (delta * 30);
+    e.preventDefault();
+    });
+  });
   </script> 
 </html>
