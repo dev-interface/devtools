@@ -27,6 +27,12 @@ function mapValues(propertyValue) {
         item: "",
     }
 
+    if (propertyValue === undefined || propertyValue === null) {
+        result.item = 'null';
+        result.valid = true;
+        return result;
+    }
+
     try {
 
         if (propertyValue.constructor == Object) {

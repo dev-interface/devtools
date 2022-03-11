@@ -1,3 +1,5 @@
+logger = new Logger('StateController');
+
 /**
  * Esta variável armazena o estado global do parser,
  * contém os valores de refêrencia para determinar se um campo
@@ -13,7 +15,8 @@ const GlobalDataState = {
      */
     updateState(obj, updater_name) {
         if (!obj instanceof Object) throw new InvalidStateUpdate("O objeto informado não é válido.");
-        if (updater_name == '' || typeof updater_name != 'string') throw new InvalidStateUpdate("O nome do modificador do estado é obrigatório.")
+        if (updater_name == '' || typeof updater_name != 'string')
+            throw new InvalidStateUpdate("O nome do modificador do estado é obrigatório.")
         this.lastUpdaterName = updater_name;
         this.currentState = obj;
         this.notifyAll();
@@ -21,7 +24,8 @@ const GlobalDataState = {
     /**
      * Limpa o estado Global atual, e notifica a todos os ouvintes.
      */
-    cleanState() {
+    cleanState(agent) {
+        this.lastUpdaterName = agent;
         this.currentState = null;
         this.notifyAll();
     },
@@ -66,7 +70,7 @@ const JsonState = {
         if (update_string == '') {
             JsonState.currentState = '';
             UIControler.cleanBorders();
-            GlobalDataState.cleanState();
+            GlobalDataState.cleanState(Agents.jsonAgent);
             return;
         }
 
@@ -99,11 +103,12 @@ const IDDPosState = {
     lastStates: [],
 
     update(update_string) {
-
+        update_string = update_string?.trim();
+        
         if (update_string == '') {
             IDDPosState.currentState = '';
             UIControler.cleanBorders();
-            GlobalDataState.cleanState();
+            GlobalDataState.cleanState(Agents.iddPosAgent);
             return;
         }
 
@@ -121,7 +126,7 @@ const IDDPosState = {
         }
 
         GlobalDataState.updateState(result.codeResult, Agents.iddPosAgent);
-        if (validateIDDString(result.codeResult))
+        if (validateIDDString(update_string))
             UIControler.setIDDPosValidColor();
         else UIControler.setIDDPosInvalidColor();
 
@@ -132,9 +137,58 @@ const IDDPosState = {
     }
 }
 
+const IDDPreState = {
+    currentState: null,
+    lastStates: [],
+
+    update(update_string) {
+
+        if (update_string == '') {
+            IDDPreState.currentState = '';
+            GlobalDataState.cleanState(Agents.iddPreAgent);
+            UIControler.cleanBorders();
+            return;
+        }
+
+        if (update_string == IDDPreState.currentState) return;
+        IDDPreState.lastStates.push(IDDPreState.currentState);
+        IDDPreState.currentState = update_string;
+
+        let result = ThrowableExecutor.execute(() => {
+            return eval(update_string.replaceAll(/(\.criar)([^\s(])/g, '$1()$2'));
+        });
+
+        if (result.status != 0) {
+            logger.warn(`Falha;cdErro[${result.status}] pré-string[${update_string}]`);
+            UIControler.setIDDPreInvalidColor();
+            return;
+        }
+
+        var parsed = ThrowableExecutor.execute(()=>{
+            return parseToJson(result.codeResult.item);
+        });
+       
+        if(parsed.status != 0){
+            logger.warn(`Não foi possível converter para JS cdErro[${parsed.status}]; codeResult[${result.codeResult}]; string[${update_string}]`);
+            UIControler.setIDDPreInvalidColor();
+            return;
+        }
+
+        GlobalDataState.updateState(parsed.codeResult, Agents.iddPreAgent);
+        UIControler.setIDDPreValidColor();
+        
+    },
+    cleanLastStates() {
+        if (this.lastStates.length > 50)
+            this.lastStates = this.lastStates.slice(40);
+    }
+}
+
 function initializeObservers() {
     UIControler.registerJsonCodeObserver(JsonState.update);
     UIControler.registerIDDPosCodeObserver(IDDPosState.update);
+    UIControler.registerIDDPreCodeObserver(IDDPreState.update);
+
     GlobalDataState.registerObserver(UIJSONObserver);
     GlobalDataState.registerObserver(UIIDDPosObserver);
     GlobalDataState.registerObserver(UIIDDPreObserver);

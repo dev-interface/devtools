@@ -1,5 +1,10 @@
 //Este arquivo deve ser importado primeiro no html para que as funções possam ser chamadas de outros arquivos js.
 
+const cfg = {
+    logLevel:5 //5 - debug, 4 - info...
+}
+
+
 /**
  * Representa um observador instanciavel, ao criálo, deve se informar um script
  * para ser executado no método onUpdate.

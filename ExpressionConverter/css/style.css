@@ -6,23 +6,26 @@ h2{
     text-align: center;
     color: aliceblue;
     font-size: xx-large;
+    margin-top: 0;
+    margin-bottom: 10px;
     font-family: 'Courier New', Courier, monospace;
 }
 
 div.container{
     max-width: 450px;
-    max-height: 600px;
+    max-height: 650px;
 }
 
 div.content{
-    width: 410px; 
-    height: 550px; 
+    width: 425px; 
+    min-height: 570px;
+    height: 100% !important; 
     border: 2px solid white;
 }
 
 div.rel-left{
     position: relative;
     float: left;
-    margin-right: 5px;
-    margin-left: 5px;
+    margin-right: 2px;
+    margin-left: 2px;
 }

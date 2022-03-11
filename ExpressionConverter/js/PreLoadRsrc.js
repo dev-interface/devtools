@@ -1,118 +1,118 @@
 
 function createDependencyProposals(range) {
 
-    return [
+	return [
 
-        {
-            label: '_storage.obterValores',
-            kind: monaco.languages.CompletionItemKind.Function,
-            documentation: "Retorna a linha do recurso Storage com o método obter valores, implementação padrão",
-            insertText: _storage,
-            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-            range: range
-        },
-        {
-            label: '_objetos.mapa',
-            kind: monaco.languages.CompletionItemKind.Function,
-            documentation: "Retorna a linha do Objeto com Mapa.",
-            insertText: _objetoMapa,
-            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-            range: range
-        },
+		{
+			label: '_storage.obterValores',
+			kind: monaco.languages.CompletionItemKind.Function,
+			documentation: "Retorna a linha do recurso Storage com o método obter valores, implementação padrão",
+			insertText: _storage,
+			insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+			range: range
+		},
+		{
+			label: '_objetos.mapa',
+			kind: monaco.languages.CompletionItemKind.Function,
+			documentation: "Retorna a linha do Objeto com Mapa.",
+			insertText: _objetoMapa,
+			insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+			range: range
+		},
 
-        {
-            label: '$hugme.canceladoAuto',
-            kind: monaco.languages.CompletionItemKind.Function,
-            documentation: "Retorna a linha do Hugme cancelado automáticamente.",
-            insertText: _stringHugme_canceladoAuto,
-            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-            range: range
-        },
+		{
+			label: '$hugme.canceladoAuto',
+			kind: monaco.languages.CompletionItemKind.Function,
+			documentation: "Retorna a linha do Hugme cancelado automáticamente.",
+			insertText: _stringHugme_canceladoAuto,
+			insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+			range: range
+		},
 
-        {
-            label: '$hugme.cancelamentoSolc',
-            kind: monaco.languages.CompletionItemKind.Function,
-            documentation: "Retorna a linha do Hugme cancelado solicitado.",
-            insertText: _stringHugme_solicCanc,
-            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-            range: range
-        }, 
+		{
+			label: '$hugme.cancelamentoSolc',
+			kind: monaco.languages.CompletionItemKind.Function,
+			documentation: "Retorna a linha do Hugme cancelado solicitado.",
+			insertText: _stringHugme_solicCanc,
+			insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+			range: range
+		},
 
-        {
-            label: '$hugme.ativo',
-            kind: monaco.languages.CompletionItemKind.Function,
-            documentation: "Retorna a linha do Hugme ativo.",
-            insertText: _stringHugme_ativo,
-            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-            range: range
-        }, 
+		{
+			label: '$hugme.ativo',
+			kind: monaco.languages.CompletionItemKind.Function,
+			documentation: "Retorna a linha do Hugme ativo.",
+			insertText: _stringHugme_ativo,
+			insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+			range: range
+		},
 
-        {
-            label: '$hugme.congelado',
-            kind: monaco.languages.CompletionItemKind.Function,
-            documentation: "Retorna a linha do Hugme congelado.",
-            insertText: _stringHugme_congelado,
-            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-            range: range
-        }, 
+		{
+			label: '$hugme.congelado',
+			kind: monaco.languages.CompletionItemKind.Function,
+			documentation: "Retorna a linha do Hugme congelado.",
+			insertText: _stringHugme_congelado,
+			insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+			range: range
+		},
 
-        {
-            label: '$hugme.periodoCanc',
-            kind: monaco.languages.CompletionItemKind.Function,
-            documentation: "Retorna a linha do Hugme período cancelamento.",
-            insertText: _stringHugme_periodo_canc,
-            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-            range: range
-        }, 
+		{
+			label: '$hugme.periodoCanc',
+			kind: monaco.languages.CompletionItemKind.Function,
+			documentation: "Retorna a linha do Hugme período cancelamento.",
+			insertText: _stringHugme_periodo_canc,
+			insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+			range: range
+		},
 
 
-    ];
+	];
 }
 
 
 monaco.languages.registerCompletionItemProvider('javascript', {
-    provideCompletionItems: function (model, position) {
-        var word = model.getWordUntilPosition(position);
-        var range = {
-            startLineNumber: position.lineNumber,
-            endLineNumber: position.lineNumber,
-            startColumn: word.startColumn,
-            endColumn: word.endColumn
-        };
-        return {
-            suggestions: createDependencyProposals(range)
-        };
-    }
+	provideCompletionItems: function (model, position) {
+		var word = model.getWordUntilPosition(position);
+		var range = {
+			startLineNumber: position.lineNumber,
+			endLineNumber: position.lineNumber,
+			startColumn: word.startColumn,
+			endColumn: word.endColumn
+		};
+		return {
+			suggestions: createDependencyProposals(range)
+		};
+	}
 });
 
 
 
 
 var _storage = JSON.stringify({
-    "dsChave1":"valor_chave_1",
-    "dsChave2":"valor_chave_2",
-    "dsChave3":"valor_chave_3",
-    "dsValor":{
-        //Suas variáveis aqui.
-    } 
+	"dsChave1": "valor_chave_1",
+	"dsChave2": "valor_chave_2",
+	"dsChave3": "valor_chave_3",
+	"dsValor": {
+		//Suas variáveis aqui.
+	}
 }, null, '\t');
 
 var _objetoMapa = JSON.stringify(
-    {
-        "sublocality_level_1": "Umuarama",
-        "country": "Brasil",
-        "route": "Avenida Presidente Kennedy",
-        "lng": "-34.8575275",
-        "administrative_area_level_2": "Olinda",
-        "administrative_area_level_1": "Pernambuco",
-        "street_number": "170",
-        "postal_code": "53010-111",
-        "lat": "-8.019708999999999",
-        "adr": "Av. Pres. Kennedy, 170 - Umuarama, Olinda - PE, 53010-111, Brasil",
-        "searchbox": "Avenida Presidente Kennedy, 170 - Santa Tereza, Olinda - PE, Brasil"
-    },
-    null,
-    '\t'
+	{
+		"sublocality_level_1": "Umuarama",
+		"country": "Brasil",
+		"route": "Avenida Presidente Kennedy",
+		"lng": "-34.8575275",
+		"administrative_area_level_2": "Olinda",
+		"administrative_area_level_1": "Pernambuco",
+		"street_number": "170",
+		"postal_code": "53010-111",
+		"lat": "-8.019708999999999",
+		"adr": "Av. Pres. Kennedy, 170 - Umuarama, Olinda - PE, 53010-111, Brasil",
+		"searchbox": "Avenida Presidente Kennedy, 170 - Santa Tereza, Olinda - PE, Brasil"
+	},
+	null,
+	'\t'
 );
 
 var _stringHugme_canceladoAuto = JSON.stringify({
@@ -175,7 +175,36 @@ var _stringHugme_canceladoAuto = JSON.stringify({
 	"dtConfirmaPlano": "20/10/2020",
 	"msCapZen": "0",
 	"cdTicket": "0",
-	"dsMsgMensAberta": "dt=561{133{dt=116{vlMens=6{110.00}dtPeriodoInic=10{13/03/2021}dtPeriodoFim=10{12/04/2021}dtVencMens=10{20/03/2021}dsStatusMens=4{Pago}}id=3{row}}135{dt=118{vlMens=6{100.00}dtPeriodoInic=10{13/04/2021}dtPeriodoFim=10{12/05/2021}dtVencMens=10{20/04/2021}dsStatusMens=6{Aberto}}id=3{row}}135{dt=118{vlMens=6{100.00}dtPeriodoInic=10{13/05/2021}dtPeriodoFim=10{12/06/2021}dtVencMens=10{20/05/2021}dsStatusMens=6{Aberto}}id=3{row}}138{dt=121{vlMens=6{110.00}dtPeriodoInic=10{13/06/2021}dtPeriodoFim=10{12/07/2021}dtVencMens=10{20/06/2021}dsStatusMens=9{Rejeitado}}id=3{row}}}id=4{list}}",
+	"dsMsgMensAberta": [
+		{
+			"vlMens": "110.00",
+			"dtPeriodoInic": "13/03/2021",
+			"dtPeriodoFim": "12/04/2021",
+			"dtVencMens": "20/03/2021",
+			"dsStatusMens": "Pago"
+		},
+		{
+			"vlMens": "100.00",
+			"dtPeriodoInic": "13/04/2021",
+			"dtPeriodoFim": "12/05/2021",
+			"dtVencMens": "20/04/2021",
+			"dsStatusMens": "Aberto"
+		},
+		{
+			"vlMens": "100.00",
+			"dtPeriodoInic": "13/05/2021",
+			"dtPeriodoFim": "12/06/2021",
+			"dtVencMens": "20/05/2021",
+			"dsStatusMens": "Aberto"
+		},
+		{
+			"vlMens": "110.00",
+			"dtPeriodoInic": "13/06/2021",
+			"dtPeriodoFim": "12/07/2021",
+			"dtVencMens": "20/06/2021",
+			"dsStatusMens": "Rejeitado"
+		}
+	],
 	"cdSiglaUnid": "RJCFLA4",
 	"dsMsgMensCanc": [],
 	"dsClassificacao": "",
@@ -317,7 +346,36 @@ var _stringHugme_solicCanc = JSON.stringify({
 	"dtConfirmaPlano": "20/10/2020",
 	"msCapZen": "0",
 	"cdTicket": "0",
-	"dsMsgMensAberta": "dt=561{133{dt=116{vlMens=6{110.00}dtPeriodoInic=10{13/03/2021}dtPeriodoFim=10{12/04/2021}dtVencMens=10{20/03/2021}dsStatusMens=4{Pago}}id=3{row}}135{dt=118{vlMens=6{100.00}dtPeriodoInic=10{13/04/2021}dtPeriodoFim=10{12/05/2021}dtVencMens=10{20/04/2021}dsStatusMens=6{Aberto}}id=3{row}}135{dt=118{vlMens=6{100.00}dtPeriodoInic=10{13/05/2021}dtPeriodoFim=10{12/06/2021}dtVencMens=10{20/05/2021}dsStatusMens=6{Aberto}}id=3{row}}138{dt=121{vlMens=6{110.00}dtPeriodoInic=10{13/06/2021}dtPeriodoFim=10{12/07/2021}dtVencMens=10{20/06/2021}dsStatusMens=9{Rejeitado}}id=3{row}}}id=4{list}}",
+	"dsMsgMensAberta": [
+		{
+			"vlMens": "110.00",
+			"dtPeriodoInic": "13/03/2021",
+			"dtPeriodoFim": "12/04/2021",
+			"dtVencMens": "20/03/2021",
+			"dsStatusMens": "Pago"
+		},
+		{
+			"vlMens": "100.00",
+			"dtPeriodoInic": "13/04/2021",
+			"dtPeriodoFim": "12/05/2021",
+			"dtVencMens": "20/04/2021",
+			"dsStatusMens": "Aberto"
+		},
+		{
+			"vlMens": "100.00",
+			"dtPeriodoInic": "13/05/2021",
+			"dtPeriodoFim": "12/06/2021",
+			"dtVencMens": "20/05/2021",
+			"dsStatusMens": "Aberto"
+		},
+		{
+			"vlMens": "110.00",
+			"dtPeriodoInic": "13/06/2021",
+			"dtPeriodoFim": "12/07/2021",
+			"dtVencMens": "20/06/2021",
+			"dsStatusMens": "Rejeitado"
+		}
+	],
 	"cdSiglaUnid": "RJCFLA4",
 	"dsMsgMensCanc": [],
 	"dsClassificacao": "",

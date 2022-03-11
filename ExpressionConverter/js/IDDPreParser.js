@@ -1,3 +1,5 @@
+logger = new Logger('IDDPreParser');
+
 /**
  * Esta função realiza a conversão de objeto javascript para linha idd pré processada, ou array 
  * para lista pré processada.
@@ -37,10 +39,34 @@ const Names = {
 }
 
 function mapObject(object, objName) {
+    if (object === undefined || object === null) {
+        logger.debug(`valor null recebido; objName[${objName}]; object[${objName}]`);
+        return 'null';
+    }
+
     var keys = Object.getOwnPropertyNames(object);
 
+    if (object instanceof Array) {
+        if (!objName) objName = indexes.nextList();
 
-    if (object.constructor == Object) {
+        var concatReturn = initList(objName);
+        if (object.length == 0) return { concatReturn, elementName: objName };
+
+        for (cdInd in object) {
+            var value = object[cdInd];
+
+            if (value instanceof Object || value instanceof Array) {
+                var subValue = mapObject(value);
+                concatReturn += subValue.concatReturn;
+                concatReturn += insertIntoList(subValue.elementName, objName, true);
+            } else {
+                concatReturn += insertIntoList(value, objName);
+            }
+
+
+        }
+        return { concatReturn, elementName: objName };
+    } else if (object instanceof Object) {
 
         if (!objName) objName = indexes.nextRow();
 
@@ -50,7 +76,7 @@ function mapObject(object, objName) {
         for (var key in keys) {
             var value = object[keys[key]];
 
-            if (value.constructor == Object || value.constructor == Array) {
+            if (value instanceof Object || value instanceof Array) {
                 var name = Names.isInUse(keys[key]) ? keys[key].toString() + indexes.nextInt() : keys[key];
                 Names.push(name);
                 var subValue = mapObject(value, name);
@@ -63,34 +89,9 @@ function mapObject(object, objName) {
         }
 
         return { concatReturn, elementName: objName };
-    } else if (object.constructor == Array) {
-        if (!objName) objName = indexes.nextList();
-
-        var concatReturn = initList(objName);
-        if (object.length == 0) return { concatReturn, elementName: objName };
-
-        for (cdInd in object) {
-            var value = object[cdInd];
-
-            if (value.constructor == Object || value.constructor == Array) {
-                var subValue = mapObject(value);
-                concatReturn += subValue.concatReturn;
-                concatReturn += insertIntoList(subValue.elementName, objName, true);
-            } else {
-                concatReturn += insertIntoList(value, objName);
-            }
-
-
-        }
-        return { concatReturn, elementName: objName };
     } else {
         return object;
     }
-
-
-
-
-
 
 }
 

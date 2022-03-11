@@ -45,6 +45,11 @@ const UIControler = {
         idd_pos_monaco.onKeyUp(up => { function_observer(idd_pos_monaco.getModel().getValue()) });
     },
 
+    registerIDDPreCodeObserver(function_observer) {
+        idd_pre_monaco.onDidPaste(up => { function_observer(idd_pre_monaco.getModel().getValue()) });
+        idd_pre_monaco.onKeyUp(up => { function_observer(idd_pre_monaco.getModel().getValue()) });
+    },
+
     setJsonCode(string) {
         if (json_monaco)
             json_monaco.getModel().setValue(string);
@@ -63,7 +68,7 @@ const UIControler = {
 
 const UIJSONObserver = new Observer(onJsonUpdate);
 const UIIDDPosObserver = new Observer(onIDDPosUpdate);
-const UIIDDPreObserver = new Observer(onIDDPreUpdate)
+const UIIDDPreObserver = new Observer(onIDDPreUpdate);
 
 function onJsonUpdate(obj, updater_name) {
     if (updater_name == Agents.jsonAgent) return;
@@ -149,7 +154,12 @@ function initializeEditors() {
         autoIndent: true,
         minimap:{
             enabled:false
-        }
+        },
+        glyphMargin: false,
+        lineDecorationsWidth: 5,
+        lineNumbersMinChars: 2,
+        folding: false,
+        lineNumbers:false
     });
 
     idd_pos_monaco = monaco.editor.create(idd_pos_div, {
@@ -157,16 +167,22 @@ function initializeEditors() {
         wordWrap: true,
         minimap:{
             enabled:false
-        }
+        },
+        lineNumbers:false,
+        folding: false,
+        lineDecorationsWidth: 5,
     });
 
 
     idd_pre_monaco = monaco.editor.create(idd_pre_div, {
         theme: 'vs-dark',
-        readOnly: true,
+        readOnly: false,
         minimap:{
             enabled:false
-        }
+        },
+        lineNumbers:false,
+        folding: false,
+        lineDecorationsWidth: 5,
     });
 
 
