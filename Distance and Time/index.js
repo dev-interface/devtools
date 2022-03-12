@@ -4,7 +4,7 @@ function initMap(e) {
     const bounds = new google.maps.LatLngBounds();
     const markersArray = [];
     const map = new google.maps.Map(document.getElementById("map"), {
-      center: { lat: -13.265369, lng: -52.6962693 },
+      center: { lat: -23.2613562, lng: -47.9317394 },
       zoom: 10,
     });
     // initialize services
