@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ptBR">
+  <head>
+    <meta charset="utf-8">
+    <title>Distance Matrix Service</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <link rel="stylesheet" type="text/css" href="./style.css" />
+    <script src="./index.js"></script>
+  </head>
+  <body>
+    <div id="container">
+      <div id="map"></div>
+      <div id="sidebar">
+        <form>
+          <table>
+            <tr>
+              <td><label for="origem">Origem:</label></td>
+              <td><label for="destino">Destino:</label></td>
+            </tr>
+            <tr>
+              <td><input type="text" id="origem" name="origem"></td>
+              <td><input type="text" id="destino" name="destino"></td>
+              <td><button type="submit" class="btn btn-success" onclick="initMap(event)"><b>Calcular</b></button></td>
+            </tr>
+          </table>
+        </form>
+        <p>Nota: Caso queira usar latitude e longetude tanto para (Origem:) quanto para (Destino:) use no seguinte formato (lat ,lon) usando o sinal negativo quando necessário.<br><br>Exemplo:<br> 50.087, 14.421</p>
+        <h2 style="flex-grow: 0">Resumo</h2>
+        <pre style="flex-grow: 1" id="resumo"></pre>
+        <!--<h3 style="flex-grow: 0">Request</h3>
+        <pre style="flex-grow: 1" id="request"></pre>
+        <h3 style="flex-grow: 0">Response</h3>
+        <pre style="flex-grow: 1" id="response"></pre>-->
+      </div>
+    </div>
+
+    <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8K7fswPZ21K1-wIphYSujTANG1PY3qwQ&callback=initMap&v=weekly"
+      async
+    ></script>
+  </body>
+</html>
