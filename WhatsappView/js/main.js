@@ -3,14 +3,14 @@
 var deviceTime = document.querySelector('.status-bar .time');
 var messageTime = document.querySelectorAll('.message .time');
 
-deviceTime.innerHTML = moment().format('HH:mm');
+deviceTime.innerHTML = moment().format('HH:mm:ss');
 
 setInterval(function () {
-	deviceTime.innerHTML = moment().format('HH:mm');
+	deviceTime.innerHTML = moment().format('HH:mm:ss');
 }, 1000);
 
 for (var i = 0; i < messageTime.length; i++) {
-	messageTime[i].innerHTML = moment().format('HH:mm');
+	messageTime[i].innerHTML = moment().format('HH:mm:ss');
 }
 
 /* Message */
