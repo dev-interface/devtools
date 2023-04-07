@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="language" content="pt-BR">
+    <title>Fluxoviewer</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h2>Carregamento de fluxo zip</h2>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="zipFile">Selecione um arquivo ZIP:</label>
+                <input type="file" class="form-control-file" id="zipFile" accept=".zip" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Carregar</button>
+        </form>
+        <ul class="nav nav-tabs mt-4" id="tabs" role="tablist"></ul>
+        <div class="tab-content" id="tab-content"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.7/umd/popper.min.js" integrity="sha512-uaZ0UXmB7NHxAxQawA8Ow2wWjdsedpRu7nJRSoI2mjnwtY8V5YiCWavoIpo1AhWPMLiW5iEeavmA3JJ2+1idUg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
+    <script>
+	// Configuração do tema dark
+            $('body').addClass('bg-dark text-light');
+        // Função para adicionar a aba
+        function addTab(tabId, tabName, content) {
+            // Remove a extensão .html do nome do arquivo
+            var tabLabel = tabName.replace(".html", "");
+            // Cria a estrutura da aba e do conteúdo
+            var tabLink = $("<a>").addClass("nav-link").attr("id", "tab-" + tabId).attr("data-toggle", "tab")
+                .attr("href", "#content-" + tabId).attr("role", "tab").attr("aria-controls", "content-" + tabId)
+                .attr("aria-selected", "false").text(tabLabel);
+            var tabContent = $("<div>").addClass("tab-pane fade").attr("id", "content-" + tabId).attr("role", "tabpanel")
+                .attr("aria-labelledby", "tab-" + tabId).html(content);
+
+            // Adiciona a aba somente se ainda não existir
+            if ($("#tab-" + tabId).length === 0) {
+                // Adiciona a aba e o conteúdo ao DOM
+                $("#tabs").append($("<li>").addClass("nav-item").append(tabLink));
+                $("#tab-content").append(tabContent);
+            }
+
+            // Ativa a primeira aba ao carregar a página
+            if (tabId === "inicial") {
+                tabLink.addClass("active");
+                tabContent.addClass("show active");
+            }
+        }
+
+        // Lê o arquivo ZIP
+        function readZipFile(file) {
+            var zip = new JSZip();
+
+            zip.loadAsync(file)
+                .then(function (zip) {
+                    // Obtém os nomes dos arquivos dentro do ZIP
+                    var fileNames = Object.keys(zip.files);
+					
+
+                    // Ordena os nomes dos arquivos em ordem alfabética
+                    fileNames.sort();
+
+                    // Loop para ler cada arquivo do ZIP
+                    fileNames.forEach(function (fileName, index) {
+                        // Lê o conteúdo do arquivo
+                        zip.files[fileName].async("text").then(function (content) {
+                            // Adiciona a aba com o conteúdo do arquivo
+                            addTab(index, fileName, content);
+							
+							// Encontrar o elemento li com a classe "nav-item" cujo valor do link "a.nav-link" é "inicial"
+							var liNavItemInicial = $('li.nav-item:has(a.nav-link:contains("inicial"))');
+					
+							// Verificar se o elemento foi encontrado e mover para a primeira posição
+							if (liNavItemInicial.length > 0) {
+							var ulTabs = $('#tabs');
+							if (ulTabs.children().first().is(liNavItemInicial)) {
+								// Se o elemento já está na primeira posição, não é necessário mover
+								console.log("Elemento já está na primeira posição.");
+							} else {
+								// Remover o elemento li do seu local atual
+								liNavItemInicial.detach();
+								// Adicionar o elemento li como primeiro filho da tag ul
+								ulTabs.prepend(liNavItemInicial);
+								console.log("Elemento movido para a primeira posição.");
+							}
+							} else {
+							console.log("Elemento não encontrado.");
+							}
+							
+                            // Verifica se é o último arquivo para ativar a primeira aba
+                            if (index === fileNames.length - 1) {
+                                // Ativa a primeira aba após o carregamento de todos os arquivos
+                                $("#tab-0").tab("show");
+                            }
+                        });
+                    });
+                })
+                .catch(function (error) {
+                    console.error("Erro ao ler o arquivo ZIP:", error);
+                });
+        }
+		
+
+        // Manipula o evento de envio do formulário
+        $("#uploadForm").on("submit", function (event) {
+            event.preventDefault();
+            var zipFile = $("#zipFile")[0].files[0];
+            readZipFile(zipFile);
+        });
+    </script>
+</body>
+
+</html>
+
+                    
