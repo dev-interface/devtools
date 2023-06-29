@@ -1,104 +1,134 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="language" content="pt-BR">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<link rel="preload" href="https://cdn.openai.com/common/fonts/soehne/soehne-buch.woff2" as="font" crossorigin="">
-<link rel="preload" href="https://cdn.openai.com/common/fonts/soehne/soehne-halbfett.woff2" as="font" crossorigin="">
-<link rel="preload" href="https://cdn.openai.com/common/fonts/soehne/soehne-mono-buch.woff2" as="font" crossorigin="">
-<link rel="preload" href="https://cdn.openai.com/common/fonts/soehne/soehne-mono-halbfett.woff2" as="font" crossorigin="">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@200;300;400;500;600;700;800;900&amp;display=swa">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="https://static.snoweb.io/snowebsvg/dist/css/themes-0.0.129.css">
-<style>
-  /* Estilos CSS opcionais */
-  .chat-container {
-    width: 700px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f5f5f5;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-family: Arial, sans-serif;
-	position: fixed;
-	bottom: 30px;
-	left: 50%;
-	transform: translateX(-50%);
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="language" content="pt-BR">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="preload" href="https://cdn.openai.com/common/fonts/soehne/soehne-buch.woff2" as="font" crossorigin="">
+  <link rel="preload" href="https://cdn.openai.com/common/fonts/soehne/soehne-halbfett.woff2" as="font" crossorigin="">
+  <link rel="preload" href="https://cdn.openai.com/common/fonts/soehne/soehne-mono-buch.woff2" as="font" crossorigin="">
+  <link rel="preload" href="https://cdn.openai.com/common/fonts/soehne/soehne-mono-halbfett.woff2" as="font"
+    crossorigin="">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Mulish:wght@200;300;400;500;600;700;800;900&amp;display=swa">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://static.snoweb.io/snowebsvg/dist/css/themes-0.0.129.css">
+  <style>
+    /* Estilos CSS opcionais */
+    .chat-container {
+      width: 700px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-family: Arial, sans-serif;
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
 
-  .user-message {
-    margin-bottom: 10px;
-  }
+    .chat-container2 {
+      width: 700px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-family: Arial, sans-serif;
+      position: fixed;
+      top: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      overflow: auto;
+      scroll-behavior: smooth;
+      max-height: calc(85vh - 80px);
+      /* Altura máxima da janela - altura do chat-container */
+    }
 
-  .bot-message {
-    margin-bottom: 10px;
-    font-weight: bold;
-  }
-  
-  .chat-input-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 651px;
-    height: 60px;
-  }
-  
-  .chat-input {
-    border-radius: 15px;
-    max-height: 200px;
-    width: 625px;
-    height: 60px;
-    overflow-y: hidden;
-  }
-  
-  .send-button {
-    position: absolute;
-    right: 312px;
-    top: 50%;
-    transform: translateY(-50%);
-    padding: 1px;
-    border-radius: 10px;
-    background-color: #fff0;
-    color: white;
-    transition: background-color 0.3s;
-    border: none;
-    outline: none;
-    cursor: pointer;
-	
-	}
-  
-  .send-button:hover {
-    background-color: #fff;
-  }
-</style>
+    .user-message {
+      margin-bottom: 10px;
+    }
+
+    .bot-message {
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    .chat-input-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 651px;
+      height: 60px;
+    }
+
+    .chat-input {
+      border-radius: 15px;
+      max-height: 200px;
+      width: 625px;
+      height: 60px;
+      overflow-y: hidden;
+    }
+
+    .send-button {
+      position: absolute;
+      right: 312px;
+      top: 50%;
+      transform: translateY(-50%);
+      padding: 1px;
+      border-radius: 10px;
+      background-color: #fff0;
+      color: white;
+      transition: background-color 0.3s;
+      border: none;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .send-button:hover {
+      background-color: #fff;
+    }
+  </style>
 </head>
+
 <body class="bg-dark text-light vsc-initialized">
-  <div class="bg-dark text-light chat-container">
+  <div class="bg-dark text-light chat-container2">
     <div id="chat-log"></div>
+  </div>
+  <div class="bg-dark text-light chat-container">
     <div class="chat-input-container">
-      <textarea class="bg-dark text-light chat-input" type="text" id="user-input" placeholder="Digite sua mensagem"></textarea>
-      <button id="send-button" class="absolute p-1 rounded-md md:bottom-3 md:p-2 md:right-3 dark:hover:bg-gray-900 dark:disabled:hover:bg-transparent right-2 disabled:text-gray-400 enabled:bg-brand-purple text-white bottom-1.5 transition-colors disabled:opacity-40" style="background-color: rgb(25, 195, 125, 0);border-radius: 100px;margin-right: -14px;);border-radius:100px"><i class="fa fa-paper-plane"></i></button>
+      <textarea class="bg-dark text-light chat-input" type="text" id="user-input"
+        placeholder="Digite sua mensagem"></textarea>
+      <button id="send-button"
+        class="absolute p-1 rounded-md md:bottom-3 md:p-2 md:right-3 dark:hover:bg-gray-900 dark:disabled:hover:bg-transparent right-2 disabled:text-gray-400 enabled:bg-brand-purple text-white bottom-1.5 transition-colors disabled:opacity-40"
+        style="background-color: rgb(25, 195, 125, 0);border-radius: 100px;margin-right: -14px;);border-radius:100px"><i
+          class="fa fa-paper-plane"></i></button>
     </div>
   </div>
 
   <script>
-  
-	 document.getElementById("user-input").addEventListener("keydown", function(event) {
-    if (event.shiftKey && event.keyCode === 13) {
-      event.preventDefault();
-    }
-  });
-  
-    const SECRET_KEY = "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";
+
+    document.getElementById("user-input").addEventListener("keydown", function (event) {
+      if (event.shiftKey && event.keyCode === 13) {
+        event.preventDefault();
+      }
+    });
+
+    const SECRET_KEY = "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";
     const MAX_TOKENS = 8000;
     const MODEL_NAME = "gpt-3.5-turbo-16k-0613";
-    const MODEL_TEMP = 0.9;
+    const MODEL_TEMP = 0.2;
 
     async function GPT(prompt, temperature = MODEL_TEMP) {
       try {
@@ -134,47 +164,64 @@
     }
 
     function appendMessage(role, message) {
-  const chatLog = document.getElementById("chat-log");
-  const messageElement = document.createElement("div");
-  messageElement.classList.add(role + "-message");
-  if (messageElement.className == "user-message") {
-    messageElement.style.backgroundColor = "#202123";
-  }
-  if (messageElement.className == "bot-message") {
-    messageElement.style.backgroundColor = "#353740";
-  }
-  messageElement.textContent = message;
-  chatLog.appendChild(messageElement);
+      const chatLog = document.getElementById("chat-log");
+      const messageElement = document.createElement("div");
+      messageElement.classList.add(role + "-message");
+      if (messageElement.className == "user-message") {
+        messageElement.style.backgroundColor = "#202123";
+      }
+      if (messageElement.className == "bot-message") {
+        messageElement.style.backgroundColor = "#353740";
+      }
+      messageElement.textContent = message;
+      chatLog.appendChild(messageElement);
 
-  formatCodeBlocks(); // Chamada da função formatCodeBlocks() após adicionar a nova mensagem
-}
+      formatCodeBlocks(); // Chamada da função formatCodeBlocks() após adicionar a nova mensagem
+
+      // Adicionar o scroll automático apenas se a posição do elemento de classe chat-container2 ainda não tiver sido alcançada
+      scrollChatContainer2();
+    }
+
+    function scrollChatContainer2() {
+      const chatContainer = document.querySelector('.chat-container');
+      const chatContainerBottom = chatContainer.getBoundingClientRect().bottom;
+      const chatContainer2 = document.querySelector('.chat-container2');
+      const chatContainer2Bottom = chatContainer2.getBoundingClientRect().bottom;
+      const scrollOffset = chatContainer2Bottom - chatContainerBottom + 10;
+
+      if (scrollOffset > 0) {
+        window.scrollBy({
+          top: scrollOffset,
+          behavior: 'smooth'
+        });
+      }
+    }
 
 
     async function handleUserInput() {
-  const userInput = document.getElementById("user-input");
-  const userMessage = userInput.value.trim();
-  const userName = getUserName(); // Obtém o nome do usuário
+      const userInput = document.getElementById("user-input");
+      const userMessage = userInput.value.trim();
+      const userName = getUserName(); // Obtém o nome do usuário
 
-  if (userMessage !== "") {
-    if (!event.shiftKey) {
-      event.preventDefault(); // Desativa o comportamento padrão do Shift+Enter
-      
-      appendMessage("user", userName + ": " + userMessage);
-      
-      userInput.value = ""; // Limpa o campo de entrada após o envio da mensagem
+      if (userMessage !== "") {
+        if (!event.shiftKey) {
+          event.preventDefault(); // Desativa o comportamento padrão do Shift+Enter
 
-      try {
-        const response = await GPT(userMessage);
-        appendMessage("bot", "ChatGPT: " + response);
-      } catch (error) {
-        console.error("Erro ao chamar a API do ChatGPT:", error);
+          appendMessage("user", userName + ": " + userMessage);
+
+          userInput.value = ""; // Limpa o campo de entrada após o envio da mensagem
+
+          try {
+            const response = await GPT(userMessage);
+            appendMessage("bot", "ChatGPT: " + response);
+          } catch (error) {
+            console.error("Erro ao chamar a API do ChatGPT:", error);
+          }
+        } else {
+          userInput.value += "\n"; // Adiciona uma quebra de linha se o Shift+Enter for pressionado
+        }
       }
-    } else {
-      userInput.value += "\n"; // Adiciona uma quebra de linha se o Shift+Enter for pressionado
     }
-  }
-}
-
 
     function getUserName() {
       if (navigator.userAgentData && navigator.userAgentData.getHighEntropyValues) {
@@ -194,28 +241,28 @@
 
     // Capturar o pressionamento da tecla Enter para enviar a mensagem
     const userInput = document.getElementById("user-input");
-    userInput.addEventListener("keyup", function(event) {
+    userInput.addEventListener("keyup", function (event) {
       if (event.keyCode === 13) {
         event.preventDefault();
         handleUserInput();
       }
     });
 
-function formatCodeBlocks() {
-  const chatLog = document.getElementById("chat-log");
-  const botMessages = chatLog.getElementsByClassName("bot-message");
+    function formatCodeBlocks() {
+      const chatLog = document.getElementById("chat-log");
+      const botMessages = chatLog.getElementsByClassName("bot-message");
 
-  for (let i = 0; i < botMessages.length; i++) {
-    const messageElement = botMessages[i];
-    const messageText = messageElement.innerHTML;
-    const codeRegex = /```([\s\S]+?)```/g;
+      for (let i = 0; i < botMessages.length; i++) {
+        const messageElement = botMessages[i];
+        const messageText = messageElement.innerHTML;
+        const codeRegex = /```([\s\S]+?)```/g;
 
-    let formattedMessage = messageText.replace(codeRegex, '<code>$1</code>');
-    messageElement.innerHTML = formattedMessage;
-  }
-}
-
+        let formattedMessage = messageText.replace(codeRegex, '<code>$1</code>');
+        messageElement.innerHTML = formattedMessage;
+      }
+    }
 
   </script>
 </body>
+
 </html>
