@@ -1,130 +1,141 @@
 <!DOCTYPE html>
 <html lang="ptBR">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="stylesheet" type="text/css" href="./css/styles.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="./img/favicon-whiteV2.png" id="favicon-scheme">
-    <title>$ &nbsp;&nbsp;&nbsp;Dev Tools</title>
-    <script>
-      function title() {
-        const title = document.querySelector('title').innerHTML;
-        const titlePage = document.querySelector('h1').innerHTML;
-        if (title == '$ &nbsp;&nbsp;&nbsp;Dev Tools' && titlePage == '&gt;&nbsp;&nbsp;Dev Tools<br style="">Portifólio') {
-          document.querySelector('title').innerHTML = '$ |&nbsp&nbsp;Dev Tools';
-          document.querySelector('h1').innerHTML = '&gt;|&nbsp;Dev Tools<br style="">Portifólio';
-        }
-        else{
-          document.querySelector('title').innerHTML = '$ &nbsp;&nbsp;&nbsp;Dev Tools';
-          document.querySelector('h1').innerHTML = '&gt;&nbsp;&nbsp;Dev Tools<br style="">Portifólio';
-        }
-        setTimeout("title()", 700);
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+  <link rel="shortcut icon" type="image/x-icon" href="./img/favicon-whiteV2.png" id="favicon-scheme">
+  <title>$ &nbsp;&nbsp;&nbsp;Dev Tools</title>
+  <script>
+    function title() {
+      const title = document.querySelector('title').innerHTML;
+      const titlePage = document.querySelector('h1').innerHTML;
+      if (title == '$ &nbsp;&nbsp;&nbsp;Dev Tools' && titlePage == '&gt;&nbsp;&nbsp;Dev Tools<br style="">Portifólio') {
+        document.querySelector('title').innerHTML = '$ |&nbsp&nbsp;Dev Tools';
+        document.querySelector('h1').innerHTML = '&gt;|&nbsp;Dev Tools<br style="">Portifólio';
       }
-      
-    </script>
-  </head>
-  <body onload="title()">
-	  <div class="title-text">
-        <h1>&gt;&nbsp;&nbsp;Dev Tools<br>Portifólio</h1>
-        <p style="color: white; font-style: italic; font-family:Times New Roman;">Scrolle a página!</p>
-    </div>
-    
-    <div id="0" class="card" onmouseover="over(0)" onmouseout="out(0)">
-      <div class="card-image" ></div>
-        <div class="card-text">
-          <span class="date">Janeiro de 2022</span>
-            <h2>API - Speech to text</h2>
-            <p>Transcrição de audio em texto</p>
-		    <button><a id="button" href="https://jhonatanstarley.github.io/Web-Speech-API-Reconhecimento-de-voz-com-JavaScript/" target="blank_">Testar</a></button>
-      </div>
-    </div>
-    <div id="1" class="card" onmouseover="over(1)" onmouseout="out(1)">
-      <div class="card-image card2"></div>
-        <div class="card-text card2">
-          <span class="date">Fevereiro de 2022</span>
-            <h2>What's App View</h2>
-          <p>Logview - IDD | What's App view <br><b style="color: white;">Powered by D...</b></p>
-        <button><a id="button" href="./WhatsappView/dist.html" target="blank_">Testar</a></button>
-      </div>
-    </div>
-    <div id="2" class="card" onmouseover="over(2)" onmouseout="out(2)">
-        <div class="card-image card3"></div>
-          <div class="card-text card3">
-            <span class="date">Novembro de 2021</span>
-              <h2>Formatter</h2>
-              <p>Formatar o texto do SAC para os tickets do Zendesk</p>
-              <button><a id="button" href="./Formater/index.html" target="blank_">Testar</a></button>
-          </div>
-    </div>
-    <div id="3" class="card" onmouseover="over(3)" onmouseout="out(3)">
-      <div class="card-image" ></div>
-        <div class="card-text">
-          <span class="date">2021</span>
-            <h2>Converter Expressions</h2>
-            <p>Converte json, string, listas e linhas<br><b style="color: white;">Powered by D...</b></p>
-		    <button><a id="button" href="./ExpressionConverter/main.html" target="blank_">Testar</a></button>
-      </div>
-    </div>
-    <div id="4" class="card" onmouseover="over(4)" onmouseout="out(4)">
-      <div class="card-image card2"></div>
-        <div class="card-text card2">
-          <span class="date">2022</span>
-            <h2>Distance and time</h2>
-          <p>Retorna a distância e tempo de viagem a partir do endereço ou coordenadas</p>
-        <button><a id="button" href="./Distance and Time/index.html" target="blank_">Testar</a></button>
-      </div>
-    </div>
-    <div id="5" class="card" onmouseover="over(5)" onmouseout="out(5)">
-        <div class="card-image card3"></div>
-          <div class="card-text card3">
-            <span class="date">2023</span>
-              <h2>Fluxo Viewer</h2>
-              <p>Carrega o fluxo exportado do IDD e criar abas em uma só página.</p>
-              <button><a id="button" href="./Fluxoviewer/Fluxo_viewer.html" target="blank_">Testar</a></button>
-          </div>
-    </div>
-<div id="6" class="card" onmouseover="over(5)" onmouseout="out(5)">
-        <div class="card-image card2"></div>
-          <div class="card-text card2">
-            <span class="date">2023</span>
-              <h2>ChatGPT 3.5 Turbo</h2>
-              <p>Página do ChatGPT 3.5 Turbo, use com sabedoria! Versão preview, ainda em desenvolvimento de melhorias...</p>
-              <button><a id="button" href="./ChatGPT.html" target="blank_">Testar</a></button>
-          </div>
-    </div>
-<div id="7" class="card" onmouseover="over(5)" onmouseout="out(5)">
-        <div class="card-image"></div>
-          <div class="card-text">
-            <span class="date">2024</span>
-              <h2>Análise de Prioridades - PirelliBdRsrc</h2>
-              <p>Ferramenta de analise de prioridade do retorno do recurso em JSON. Pegar o retorno Evaluate e converter em JSON antes da analise.</p>
-              <button><a id="button" href="./ToolsPlus/LerPrioridades_v3.html" target="blank_">Testar</a></button>
-          </div>
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.2/vanilla-tilt.min.js" integrity="sha512-K9tDZvc8nQXR1DMuT97sct9f40dilGp97vx7EXjswJA+/mKqJZ8vcZLifZDP+9t08osMLuiIjd4jZ0SM011Q+w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script>
-      VanillaTilt.init(document.querySelectorAll(".card"),{
-        glare: true,
-        reverse: true,
-        "max-glare": 0.15
-      });
-    </script>
-  </body>
-  <script>
-    function over(val){
-      document.getElementById(val).className = 'card rgb';
+      else {
+        document.querySelector('title').innerHTML = '$ &nbsp;&nbsp;&nbsp;Dev Tools';
+        document.querySelector('h1').innerHTML = '&gt;&nbsp;&nbsp;Dev Tools<br style="">Portifólio';
+      }
+      setTimeout("title()", 700);
     }
-    function out(val){
-      document.getElementById(val).className = 'card';
-    }
+
   </script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js" integrity="sha512-rCjfoab9CVKOH/w/T6GbBxnAH5Azhy4+q1EXW5XEURefHbIkRbQ++ZR+GBClo3/d3q583X/gO4FKmOFuhkKrdA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<body onload="title()">
+  <div class="title-text">
+    <h1>&gt;&nbsp;&nbsp;Dev Tools<br>Portifólio</h1>
+    <p style="color: white; font-style: italic; font-family:Times New Roman;">Scrolle a página!</p>
+  </div>
+
+  <div id="0" class="card" onmouseover="over(0)" onmouseout="out(0)">
+    <div class="card-image"></div>
+    <div class="card-text">
+      <span class="date">Janeiro de 2022</span>
+      <h2>API - Speech to text</h2>
+      <p>Transcrição de audio em texto</p>
+      <button><a id="button"
+          href="https://jhonatanstarley.github.io/Web-Speech-API-Reconhecimento-de-voz-com-JavaScript/"
+          target="blank_">Testar</a></button>
+    </div>
+  </div>
+  <div id="1" class="card" onmouseover="over(1)" onmouseout="out(1)">
+    <div class="card-image card2"></div>
+    <div class="card-text card2">
+      <span class="date">Fevereiro de 2022</span>
+      <h2>What's App View</h2>
+      <p>Logview - IDD | What's App view <br><b style="color: white;">Powered by D...</b></p>
+      <button><a id="button" href="./WhatsappView/dist.html" target="blank_">Testar</a></button>
+    </div>
+  </div>
+  <div id="2" class="card" onmouseover="over(2)" onmouseout="out(2)">
+    <div class="card-image card3"></div>
+    <div class="card-text card3">
+      <span class="date">Novembro de 2021</span>
+      <h2>Formatter</h2>
+      <p>Formatar o texto do SAC para os tickets do Zendesk</p>
+      <button><a id="button" href="./Formater/index.html" target="blank_">Testar</a></button>
+    </div>
+  </div>
+  <div id="3" class="card" onmouseover="over(3)" onmouseout="out(3)">
+    <div class="card-image"></div>
+    <div class="card-text">
+      <span class="date">2021</span>
+      <h2>Converter Expressions</h2>
+      <p>Converte json, string, listas e linhas<br><b style="color: white;">Powered by D...</b></p>
+      <button><a id="button" href="./ExpressionConverter/main.html" target="blank_">Testar</a></button>
+    </div>
+  </div>
+  <div id="4" class="card" onmouseover="over(4)" onmouseout="out(4)">
+    <div class="card-image card2"></div>
+    <div class="card-text card2">
+      <span class="date">2022</span>
+      <h2>Distance and time</h2>
+      <p>Retorna a distância e tempo de viagem a partir do endereço ou coordenadas</p>
+      <button><a id="button" href="./Distance and Time/index.html" target="blank_">Testar</a></button>
+    </div>
+  </div>
+  <div id="5" class="card" onmouseover="over(5)" onmouseout="out(5)">
+    <div class="card-image card3"></div>
+    <div class="card-text card3">
+      <span class="date">2023</span>
+      <h2>Fluxo Viewer</h2>
+      <p>Carrega o fluxo exportado do IDD e criar abas em uma só página.</p>
+      <button><a id="button" href="./Fluxoviewer/Fluxo_viewer.html" target="blank_">Testar</a></button>
+    </div>
+  </div>
+  <div id="6" class="card" onmouseover="over(6)" onmouseout="out(6)">
+    <div class="card-image card2"></div>
+    <div class="card-text card2">
+      <span class="date">2023</span>
+      <h2>ChatGPT 3.5 Turbo</h2>
+      <p>Página do ChatGPT 3.5 Turbo, use com sabedoria! Versão preview, ainda em desenvolvimento de melhorias...</p>
+      <button><a id="button" href="./ChatGPT.html" target="blank_">Testar</a></button>
+    </div>
+  </div>
+  <div id="7" class="card" onmouseover="over(7)" onmouseout="out(7)">
+    <div class="card-image"></div>
+    <div class="card-text">
+      <span class="date">2024</span>
+      <h2>Análise de Prioridades - PirelliBdRsrc</h2>
+      <p>Ferramenta de analise de prioridade do retorno do recurso em JSON. Pegar o retorno Evaluate e converter em JSON
+        antes da analise.</p>
+      <button><a id="button" href="./ToolsPlus/LerPrioridades_v3.html" target="blank_">Testar</a></button>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.2/vanilla-tilt.min.js"
+    integrity="sha512-K9tDZvc8nQXR1DMuT97sct9f40dilGp97vx7EXjswJA+/mKqJZ8vcZLifZDP+9t08osMLuiIjd4jZ0SM011Q+w=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script>
-    $(document).ready(function() {
-    $('html, body, *').mousewheel(function(e, delta) {
+    VanillaTilt.init(document.querySelectorAll(".card"), {
+      glare: true,
+      reverse: true,
+      "max-glare": 0.15
+    });
+  </script>
+</body>
+<script>
+  function over(val) {
+    document.getElementById(val).className = 'card rgb';
+  }
+  function out(val) {
+    document.getElementById(val).className = 'card';
+  }
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js"
+  integrity="sha512-rCjfoab9CVKOH/w/T6GbBxnAH5Azhy4+q1EXW5XEURefHbIkRbQ++ZR+GBClo3/d3q583X/gO4FKmOFuhkKrdA=="
+  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+  $(document).ready(function () {
+    $('html, body, *').mousewheel(function (e, delta) {
       this.scrollLeft -= (delta * 30);
-    e.preventDefault();
+      e.preventDefault();
     });
   });
-  </script> 
+</script>
+
 </html>
