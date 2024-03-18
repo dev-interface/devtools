@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Análise de Prioridades</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<style>
+        body {
+            background-color: #1e1e1e;
+            color: #ffffff;
+            margin-bottom: 150px;
+        }
+
+        .footer {
+            text-align: center;
+            position: absolute;
+            bottom: auto;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            line-height: 100px;
+            background-color: rgba(0, 0, 0, 0.1);
+            color: #fff;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        #resultado {
+            margin-top: 20px;
+            background-color: #1e1e1e;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            overflow: auto;
+        }
+
+    </style>
+<body class="bg-dark text-light">
+   <main class="main">
+    <div class="container mt-5">
+        <h2 class="mb-4">Análise de Prioridades</h2>
+
+        <div class="mb-3">
+            <label for="jsonInput" class="form-label">Cole o JSON aqui:</label>
+            <textarea class="form-control" id="jsonInput" rows="10"></textarea>
+        </div>
+
+        <button type="button" class="btn btn-primary" onclick="analisarPrioridades()">Analisar</button>
+
+        <div class="mt-4">
+            <h4>Resultado:</h4>
+            <p id="resultado"></p>
+        </div>
+    </div>
+	 <footer class="footer">
+            <p id="copyright">© Starley Interface 2018 - <span id="anoAtual"></span> | Versão 3.0.0</p>
+        </footer>
+    </main>
+	
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+	
+		var anoAtual = new Date().getFullYear();
+        document.getElementById('anoAtual').innerHTML = anoAtual;
+		
+        function analisarPrioridades() {
+            // Obter o JSON do campo de entrada
+            const jsonInput = document.getElementById('jsonInput').value;
+            const jsonData = JSON.parse(jsonInput);
+
+            // Lógica para analisar prioridades
+            const resultado = analisar(jsonData.dsRetorno);
+
+            // Exibir o resultado na página
+            document.getElementById('resultado').innerText = resultado;
+        }
+
+        function analisar(listaProdutos) {
+            let resultado = '';
+
+            // Encontrar o maior valor de vlPreco
+            let maiorPreco = -Infinity;
+            listaProdutos.forEach(produto => {
+                const preco = parseFloat(produto.vlPneu.replace(',', '.'));
+                if (preco > maiorPreco) {
+                    maiorPreco = preco;
+                }
+            });
+
+            // Adicionar a prioridade com base no maior valor de vlPreco
+            listaProdutos.forEach((produto, indice) => {
+                const prioridades = [];
+
+                if (parseFloat(produto.vlPneu.replace(',', '.')) === maiorPreco) {
+                    prioridades.push(`1º Maior Preço (${produto.vlPneu})`);
+                }
+                if (produto.inPreco === 'S' && parseFloat(produto.vlPneu.replace(',', '.')) !== maiorPreco) {
+                    prioridades.push('Preço');
+                }
+                if (produto.inVerde === 'S') {
+                    prioridades.push('Verde');
+                }
+                if (produto.inHomolog === 'S') {
+                    prioridades.push('Homologado');
+                }
+                if (produto.inMarcado === 'S') {
+                    prioridades.push('Marcado');
+                }
+                if (produto.inFormula === 'S') {
+                    prioridades.push('Fórmula');
+                }
+
+                resultado += `Índice ${indice + 1}: Produto ${produto.cdPneu}: Prioridades - ${prioridades.join(', ')}\n`;
+            });
+
+            return resultado;
+        }
+    </script>
+</body>
+
+</html>
