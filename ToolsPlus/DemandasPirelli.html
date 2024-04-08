@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ptbr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demandas</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+   <style>
+   
+        body {
+            background-color: #1e1e1e;
+            color: #ffffff;
+            margin-bottom: 150px;
+        }
+		
+        .footer {
+            text-align: center;
+            position: absolute;
+            bottom: auto;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            line-height: 100px;
+            background-color: rgba(0, 0, 0, 0.1);
+            color: #fff;
+        }
+
+        .container {
+            margin-top: 100px;
+        }
+
+    </style>
+<body class="bg-dark text-light">
+<main class="main">
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-6">
+        <h2 class="text-center mb-4">Demandas</h2>
+        <div class="card">
+          <div class="card-body">
+            <canvas id="demandasChart"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <h2 class="text-center mb-4">Total de Demandas</h2>
+        <div class="card bg-light">
+          <div class="card-body">
+            <div id="totalDemandas" class="text-center text-dark"></div>
+          </div>
+        </div>
+        <div class="card mt-4">
+          <div class="card-body">
+            <canvas id="doughnutChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+          <footer class="footer">
+            <p id="copyright">© Starley Interface 2018 - <span id="anoAtual"></span> | Versão 1.0.0</p>
+        </footer>
+    </main>
+
+  <script>
+  
+		var anoAtual = new Date().getFullYear();
+        document.getElementById('anoAtual').innerHTML = anoAtual;
+		
+    // Função para verificar o contraste e definir a cor do texto
+    function definirCorTexto(bgColor) {
+      // Converter a cor do fundo para o formato hexadecimal
+      var hexColor = bgColor.substring(1); // Remover o caractere #
+      var r = parseInt(hexColor.substring(0,2),16); // Extrair o componente R (vermelho)
+      var g = parseInt(hexColor.substring(2,4),16); // Extrair o componente G (verde)
+      var b = parseInt(hexColor.substring(4,6),16); // Extrair o componente B (azul)
+
+      // Calcular o brilho relativo usando a fórmula W3C
+      var brightness = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+
+      // Definir a cor do texto com base no brilho
+      return brightness > 125 ? "#000000" : "#FFFFFF"; // Cor preta para fundos claros e cor branca para fundos escuros
+    }
+
+    // Função para carregar os dados da API e criar os gráficos
+    function carregarDadosEPlotarGraficos() {
+      // URL da API que retorna os dados em JSON
+      var apiUrl = 'https://script.google.com/macros/s/AKfycbw_xCGGA1VVJmTYojJNT9M_ECo90LiZPt1WC-cf820SyFGKpYrikLvQfQI83dho9Gmt/exec';
+
+      // Fazer requisição GET para a API
+      fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+          // Extrair os dados do JSON
+          var demandas = data.slice(0, data.length - 1); // Ignorar a última entrada (Total)
+
+          // Preparar os dados para os gráficos
+          var labels = [];
+          var valores = [];
+
+          demandas.forEach(demanda => {
+            var chave = Object.keys(demanda)[0];
+            labels.push(chave);
+            valores.push(demanda[chave]);
+          });
+
+          // Criar o gráfico de barras
+          var ctxBar = document.getElementById('demandasChart').getContext('2d');
+          var chartBar = new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+              labels: labels,
+              datasets: [{
+                label: 'Quantidade',
+                data: valores,
+                backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+              }]
+            },
+            options: {
+              scales: {
+                yAxes: [{
+                  ticks: {
+                    beginAtZero: true
+                  }
+                }]
+              }
+            }
+          });
+
+          // Criar o gráfico de doughnut
+          var total = data[data.length - 1]["Total"];
+          var totalDemandasDiv = document.getElementById('totalDemandas');
+          totalDemandasDiv.innerText = "Total de demandas: " + total;
+          totalDemandasDiv.style.color = definirCorTexto(window.getComputedStyle(totalDemandasDiv.parentNode.parentNode).getPropertyValue('background-color'));
+
+          var doughnutData = {
+            labels: labels,
+            datasets: [{
+              data: valores,
+              backgroundColor: [
+                'rgba(255, 99, 132, 0.7)',
+                'rgba(54, 162, 235, 0.7)',
+                'rgba(255, 206, 86, 0.7)',
+                'rgba(75, 192, 192, 0.7)',
+                'rgba(153, 102, 255, 0.7)',
+                'rgba(255, 159, 64, 0.7)',
+                'rgba(128, 128, 128, 0.7)',
+                'rgba(0, 0, 0, 0.7)',
+                'rgba(255, 0, 255, 0.7)',
+                'rgba(0, 255, 255, 0.7)'
+              ],
+              borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(128, 128, 128, 1)',
+                'rgba(0, 0, 0, 1)',
+                'rgba(255, 0, 255, 1)',
+                'rgba(0, 255, 255, 1)'
+              ],
+              borderWidth: 1
+            }]
+          };
+
+          var ctxDoughnut = document.getElementById('doughnutChart').getContext('2d');
+          var doughnutChart = new Chart(ctxDoughnut, {
+            type: 'doughnut',
+            data: doughnutData
+          });
+        })
+        .catch(error => {
+          console.error('Erro ao carregar os dados:', error);
+        });
+    }
+
+    // Chamar a função ao carregar a página
+    carregarDadosEPlotarGraficos();
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ptBR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON to CSV Converter</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1e1e1e;
+            color: #ffffff;
+            margin-bottom: 150px;
+        }
+
+        .footer {
+            text-align: center;
+            position: absolute;
+            bottom: auto;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            line-height: 100px;
+            background-color: rgba(0, 0, 0, 0.1);
+            color: #fff;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        #resCsv {
+            margin-top: 20px;
+            background-color: #1e1e1e;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            overflow: auto;
+        }
+    </style>
+</head>
+
+<body class="bg-dark text-light">
+
+    <main class="main">
+        <div class="container">
+            <h2 class="mb-4">JSON to CSV Converter (getMedidas)</h2>
+
+            <div class="mb-3">
+                <label for="jsonInput" class="form-label">Cole o JSON aqui:</label>
+                <textarea class="form-control" id="jsonInput" rows="5"></textarea>
+            </div>
+            
+            <!-- Adicionando o campo para carregar um arquivo JSON -->
+            <div class="mb-3">
+                <label for="jsonFile" class="form-label">Ou escolha um arquivo JSON:</label>
+                <input type="file" class="form-control" id="jsonFile" accept=".json">
+            </div>
+
+            <button class="btn btn-primary mb-3" onclick="generateTable()">Gerar</button>
+            <button class="btn btn-success mb-3" onclick="downloadCSV()">Download</button>
+            <button class="btn btn-danger mb-3" onclick="clearTable()">Limpar</button>
+
+            <div id="resCsv"></div>
+        </div>
+        <footer class="footer">
+            <p id="copyright">© Starley Interface 2018 - <span id="anoAtual"></span> | Versão 1.0.2</p>
+        </footer>
+    </main>
+    <script>
+        var anoAtual = new Date().getFullYear();
+        document.getElementById('anoAtual').innerHTML = anoAtual;
+
+        function generateTable() {
+            const jsonInput = document.getElementById('jsonInput').value;
+            const jsonFile = document.getElementById('jsonFile').files[0]; // Obtendo o arquivo JSON
+            let jsonData = {};
+
+            if (jsonInput.trim() !== '') {
+                jsonData = JSON.parse(cleanInvalidCharacters(jsonInput));
+            } else if (jsonFile) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    jsonData = JSON.parse(cleanInvalidCharacters(e.target.result));
+                    generateCsv(jsonData);
+                };
+                reader.readAsText(jsonFile);
+                return;
+            } else {
+                alert('Por favor, cole o JSON ou selecione um arquivo.');
+                return;
+            }
+
+            generateCsv(jsonData);
+        }
+
+        function generateCsv(jsonData) {
+            const headers = ["BU", "Largura", "Altura", "Raio", "RaioSerie", "TipoVeiculo", "IpPir", "IpCam", "BandaRod", "Descricao", "CheckAplicacao", "Runflat", "Eancode", "LoadSpeedIndex", "SelfSealing", "TtTL", "isXl"];
+            const tableCsv = buildCsv(headers, jsonData.Registros);
+            document.getElementById('resCsv').innerText = tableCsv;
+        }
+
+        function buildCsv(headers, registros) {
+            let csv = headers.join('|') + '\n';
+
+            registros.forEach(registro => {
+                csv += headers.map(header => getValue(registro, header)).join('|') + '\n';
+            });
+
+            return csv.toString();
+        }
+
+		function getValue(obj, key) {
+			const value = deepValue(obj, key);
+			//console.log( 'Value para JSON: ' + JSON.stringify(value));
+			
+			if (typeof value === 'boolean') {
+				return value.toString(); // Retorna 'true' ou 'false' como uma string
+			} else if (typeof value === 'object' && value !== null) {
+				return JSON.stringify(value);
+			}
+		
+			return value;
+		}
+		
+        function deepValue(obj, key) {
+            const keys = key.split('.');
+			//console.log('Keys: ' + keys);
+            let value = obj;
+			//console.log('Obj: ' + obj);
+
+            for (const k of keys) {
+                if (!value || typeof value !== 'object') {
+                    return "";
+                }
+                value = value[k].toString();
+				//console.log('Value[k]: ' + value);
+            }
+
+            return value || "";
+        }
+
+        function downloadCSV() {
+            const csvContent = document.getElementById('resCsv').innerText;
+            const blob = new Blob([csvContent], {
+                type: 'text/csv;charset=utf-8'
+            });
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = 'getmedidas.csv';
+            link.click();
+        }
+
+        function clearTable() {
+            document.getElementById('resCsv').innerText = '';
+        }
+
+        function cleanInvalidCharacters(jsonString) {
+            return jsonString.replace(/[^\x20-\x7E]/g, ' ');
+        }
+    </script>
+
+</body>
+
+</html>
