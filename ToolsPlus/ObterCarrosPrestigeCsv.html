@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ptbr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON para CSV - Múltiplos Arquivos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            background-color: #1e1e1e;
+            color: #ffffff;
+            margin-bottom: 150px;
+        }
+        .footer {
+            text-align: center;
+            position: absolute;
+            bottom: -50%;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            line-height: 100px;
+            background-color: rgba(0, 0, 0, 0.1);
+            color: #fff;
+        }
+        #resCsv {
+            height: 400px; /* Ajuste a altura conforme necessário */
+        }
+    </style>
+    <!-- CDN para Monaco Editor -->
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/editor/editor.main.min.css">
+</head>
+<body class="bg-dark text-light">
+<main>
+<div class="container mt-5">
+    <h2>Converter JSON para CSV - Campneus (Carros PRESTIGE)</h2>
+    <div class="mb-3">
+        <label for="jsonInput" class="form-label">Cole o JSON aqui:</label>
+        <textarea class="form-control" id="jsonInput" rows="10"></textarea>
+    </div>
+    <div class="mb-3">
+        <label for="jsonFile" class="form-label">Ou faça upload de arquivos JSON:</label>
+        <input class="form-control" type="file" id="jsonFile" accept=".json" multiple>
+    </div>
+    <button onclick="convertJsonToCsv()" class="btn btn-primary">Converter</button>
+    <button onclick="downloadCsv()" class="btn btn-success">Download</button>
+    <button onclick="clearFields()" class="btn btn-secondary">Limpar</button>
+</div>
+
+<div class="container mt-3">
+    <h3>Resultado CSV:</h3>
+    <div id="resCsv"></div>
+</div>
+<footer class="footer">
+    <p id="copyright">© Starley Interface 2017 - <span id="anoAtual"></span> | Versão 1.0.0</p>
+</footer>
+</main>
+<!-- Adicionando scripts do Monaco Editor -->
+<script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
+<script>
+    var anoAtual = new Date().getFullYear();
+    document.getElementById('anoAtual').innerHTML = anoAtual;
+</script>
+<script>
+let globalCsv = ''; // Variável para armazenar o CSV gerado globalmente
+let editor; // Referência ao editor Monaco
+
+function convertJsonToCsv() {
+    const jsonInput = document.getElementById('jsonInput').value;
+    const jsonFiles = document.getElementById('jsonFile').files;
+    let filesProcessed = 0;
+
+    if (jsonFiles.length > 0) {
+        Array.from(jsonFiles).forEach(file => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const json = JSON.parse(e.target.result);
+                processAndDisplayJson(json, ++filesProcessed === jsonFiles.length);
+            };
+            reader.readAsText(file);
+        });
+    } else if (jsonInput) {
+        const json = JSON.parse(jsonInput);
+        processAndDisplayJson(json, true);
+    } else {
+        alert('Por favor, insira um JSON ou faça upload de arquivos JSON.');
+    }
+}
+
+function processAndDisplayJson(json, isFinalFile) {
+    let csv = isFinalFile ? globalCsv : '';
+    json.brand_models.forEach(model => {
+        if ((model.model_segments.includes("PRESTIGE")) || (model.model_segments.includes("PREMIUM"))) {
+            model.model_versions.forEach(version => {
+                const row = [
+                    model.model_segments.join('; '),
+                    json.car_maker,
+                    model.model_name,
+                    version.car_version,
+                    model.model_years_list.join('; ')
+                ].join('|');
+                csv += row + '\n';
+            });
+        }
+    });
+
+    if (isFinalFile) {
+        globalCsv = csv;
+        editor.setValue(csv); // Atualiza o valor do editor
+    } else {
+        globalCsv += csv;
+    }
+}
+
+function downloadCsv() {
+    if (!globalCsv) {
+        alert('Nenhum CSV para baixar. Por favor, gere o CSV primeiro.');
+        return;
+    }
+    const blob = new Blob([globalCsv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'resultado.csv';
+    link.click();
+}
+
+function clearFields() {
+    document.getElementById('jsonInput').value = '';
+    document.getElementById('jsonFile').value = '';
+    editor.setValue(''); // Limpa o editor
+    globalCsv = '';
+}
+
+    require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs' } });
+    require(['vs/editor/editor.main'], function () {
+    editor = monaco.editor.create(document.getElementById('resCsv'), {
+        value: '',
+        language: 'textplain',
+        theme: 'vs-dark',
+        readOnly: true,
+		automaticLayout: true,
+        lineNumbers: "on",
+		wordWrap: 'on'
+    });
+});
+</script>
+
+</body>
+</html>
