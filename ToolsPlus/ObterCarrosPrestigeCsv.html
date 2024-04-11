@@ -97,7 +97,7 @@ function processAndDisplayJson(json, isFinalFile) {
                     json.car_maker,
                     model.model_name,
                     version.car_version,
-                    model.model_years_list.join('; ')
+                    model.model_years_list.join('# ')
                 ].join('|');
                 csv += row + '\n';
             });
