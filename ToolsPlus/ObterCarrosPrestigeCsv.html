@@ -13,6 +13,7 @@
     <!-- Script Bootstrap 5 -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <style>
+	
         /* Estilo do corpo, ajuste para modo escuro */
         body {
 			-webkit-text-size-adjust: none;
@@ -20,6 +21,7 @@
             background-color: #1e1e1e;
             color: #ffffff;
             margin-bottom: 150px;
+			transition: color 0.3s ease; /* Transição suave para a cor do link */
         }
 		
         /* Estilo do cabeçalho */
@@ -58,6 +60,19 @@
         #toggleThemeButton {
             margin-right: 10px; /* Espaçamento à direita do botão */
         }
+		
+		/* Classe para links escuros no tema claro */
+		.link-dark {
+			color: #000 !important; /* Preto */
+		}
+		
+		/* Cor do link ao passar o mouse por cima */
+		.link-dark:hover {
+			color: blue; /* Azul ao passar o mouse */
+		}
+		
+
+		
     </style>
     <!-- CDN para Monaco Editor -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/editor/editor.main.min.css">
@@ -97,7 +112,7 @@
             <h2>Converter JSON para CSV - Campneus (Carros PRESTIGE)</h2>
 
             <!-- Adiciona o parágrafo com o link da base de dados -->
-            <p><a href="https://drive-data-export.usercontent.google.com/download/bp8b55l2qs4tjvlt9cs1g41qe4m5afvg/6keiv5eratgfeppq7v3m2e5duvld8ak7/1712880000000/a5395ddc-4705-4e81-8133-5dc6b3463b2f/111424158906794601639/ADt3v-NU1vDvDkee8Ay8x3ng_rUhxvCWV9e8jFLmv8RYbJLZN5dyHb9rKdYHtfgkg0IglbI8vbO3ZCKjpWgZSdqEzvTJMhrsdG4fgo7lbXBKk3ec9PFTRMy49X68yPzDhd8lV79XETpk9jXDuJdoiEGcbmxQX_SUEkEk_d2c6tlAZDaQp1gcb4PUplZdf3um6l2XjERhlk4R5f-Lnm5jQFAunogEfU6rxvWJyz_9EBTzqovJfJIo6zFL4QYq6ZiPAB9CU005iHM3ZYFKEONtC6DocnMoJUaCFffAy-tWpKzE-h3fO3x3sMP2h0qwTkldRuop3D6ZqqzL?j=a5395ddc-4705-4e81-8133-5dc6b3463b2f&user=968479038308&i=0&authuser=0" target="_blank" class="text-light">Baixe a base de dados modelo</a></p>
+            <p class="text-light"><a href="https://drive-data-export.usercontent.google.com/download/bp8b55l2qs4tjvlt9cs1g41qe4m5afvg/6keiv5eratgfeppq7v3m2e5duvld8ak7/1712880000000/a5395ddc-4705-4e81-8133-5dc6b3463b2f/111424158906794601639/ADt3v-NU1vDvDkee8Ay8x3ng_rUhxvCWV9e8jFLmv8RYbJLZN5dyHb9rKdYHtfgkg0IglbI8vbO3ZCKjpWgZSdqEzvTJMhrsdG4fgo7lbXBKk3ec9PFTRMy49X68yPzDhd8lV79XETpk9jXDuJdoiEGcbmxQX_SUEkEk_d2c6tlAZDaQp1gcb4PUplZdf3um6l2XjERhlk4R5f-Lnm5jQFAunogEfU6rxvWJyz_9EBTzqovJfJIo6zFL4QYq6ZiPAB9CU005iHM3ZYFKEONtC6DocnMoJUaCFffAy-tWpKzE-h3fO3x3sMP2h0qwTkldRuop3D6ZqqzL?j=a5395ddc-4705-4e81-8133-5dc6b3463b2f&user=968479038308&i=0&authuser=0" target="_blank" class="text-light">>> Baixe a base de dados modelo <<</a></p>
 
             <div class="mb-3">
                 <label for="jsonInput" class="form-label">Cole o JSON aqui:</label>
@@ -233,20 +248,52 @@
             globalCsv = '';
         }
 
-        function toggleTheme() {
-            const body = document.body;
-            if (currentTheme === 'dark') {
-                body.classList.remove('bg-dark', 'text-light');
-                body.classList.add('bg-light', 'text-dark');
-                currentTheme = 'light';
-                document.getElementById('themeIcon').className = 'bi bi-moon';
-            } else {
-                body.classList.remove('bg-light', 'text-dark');
-                body.classList.add('bg-dark', 'text-light');
-                currentTheme = 'dark';
-                document.getElementById('themeIcon').className = 'bi bi-sun';
-            }
-        }
+		function toggleTheme() {
+			const body = document.body;
+			const links = document.querySelectorAll('a');
+			const paragraphs = document.querySelectorAll('p');
+		
+			if (currentTheme === 'dark') {
+				// Remover classes de tema escuro e adicionar classes de tema claro
+				body.classList.remove('bg-dark', 'text-light');
+				body.classList.add('bg-light', 'text-dark');
+				
+				// Adicionar classes de tema claro aos links e parágrafos
+				links.forEach(link => {
+					link.classList.remove('link-light');
+					link.classList.add('link-dark');
+				});
+		
+				paragraphs.forEach(paragraph => {
+					paragraph.classList.remove('text-light');
+					paragraph.classList.add('text-dark');
+				});
+		
+				// Atualizar ícone de tema
+				document.getElementById('themeIcon').className = 'bi bi-moon';
+				currentTheme = 'light';
+			} else {
+				// Remover classes de tema claro e adicionar classes de tema escuro
+				body.classList.remove('bg-light', 'text-dark');
+				body.classList.add('bg-dark', 'text-light');
+				
+				// Adicionar classes de tema escuro aos links e parágrafos
+				links.forEach(link => {
+					link.classList.remove('link-dark');
+					link.classList.add('link-light');
+				});
+		
+				paragraphs.forEach(paragraph => {
+					paragraph.classList.remove('text-dark');
+					paragraph.classList.add('text-light');
+				});
+		
+				// Atualizar ícone de tema
+				document.getElementById('themeIcon').className = 'bi bi-sun';
+				currentTheme = 'dark';
+			}
+		}
+
 		
 		// Função para alternar o modo de acessibilidade
 		function toggleAccessibility() {
