@@ -132,7 +132,7 @@
             <div id="resCsv"></div>
         </div>
         <footer class="footer">
-            <p id="copyright">© Starley Interface 2017 - <span id="anoAtual"></span> | Versão 1.0.0</p>
+            <p id="copyright">© Starley Interface 2017 - <span id="anoAtual"></span> | Versão 1.0.1</p>
         </footer>
     </main>
 
@@ -189,12 +189,26 @@
                     const file = zip.files[fileName];
                     if (!file.dir && file.name.endsWith('.json')) {
                         const jsonData = await file.async('text');
-                        const json = JSON.parse(jsonData);
+                        const json = cleanInvalidCharacters(JSON.parse(jsonData));
                         processAndDisplayJson(json, ++filesProcessed === fileNames.length);
                     }
                 });
             };
             reader.readAsArrayBuffer(zipFile);
+        }
+		
+		 function cleanInvalidCharacters(jsonString) {
+			// Remove apenas caracteres de controle não gráficos, exceto tabulações (9), nova linha (10) e retorno de carro (13)
+            return jsonString.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '');
+        }
+		
+		 function replaceAccents(text) {
+            const accents = "ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÑñ";
+            const accentsOut = "AAAAAAaaaaaaOOOOOOooooooEEEEeeeeCcIIIIiiiiUUUUuuuuNn";
+            return text.split('').map(char => {
+                const index = accents.indexOf(char);
+                return index !== -1 ? accentsOut[index] : char;
+            }).join('');
         }
 
         function processAndDisplayJson(json, isFinalFile) {
@@ -225,7 +239,7 @@
             globalCsv += csv;
 
             if (isFinalFile) {
-                editor.setValue(globalCsv);
+                editor.setValue(replaceAccents(globalCsv));
             }
         }
 
@@ -234,7 +248,7 @@
                 alert('Nenhum CSV para baixar. Por favor, gere o CSV primeiro.');
                 return;
             }
-            const blob = new Blob([globalCsv], { type: 'text/csv;charset=utf-8;' });
+            const blob = new Blob([replaceAccents(globalCsv)], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
             link.download = 'superCars.csv';

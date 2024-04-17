@@ -28,8 +28,8 @@
         .container {
             margin-top: 50px;
         }
-
-        #resCsv {
+		
+		 #resCsv {
             margin-top: 20px;
             background-color: #1e1e1e;
             color: #fff;
@@ -37,6 +37,11 @@
             border-radius: 5px;
             overflow: auto;
         }
+
+		<!-- #resCsv { -->
+            <!-- height: 400px; -->
+            <!-- /* Ajuste a altura conforme necessário */ -->
+        <!-- } -->
     </style>
 </head>
 
@@ -64,9 +69,11 @@
             <div id="resCsv"></div>
         </div>
         <footer class="footer">
-            <p id="copyright">© Starley Interface 2017 - <span id="anoAtual"></span> | Versão 1.0.1</p>
+            <p id="copyright">© Starley Interface 2017 - <span id="anoAtual"></span> | Versão 1.0.2</p>
         </footer>
     </main>
+	<!-- Adicionando scripts do Monaco Editor -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script> -->
     <script>
         var anoAtual = new Date().getFullYear();
         document.getElementById('anoAtual').innerHTML = anoAtual;
@@ -95,20 +102,39 @@
         }
 
         function generateCsv(jsonData) {
-            const headers = ["BU", "Marca", "Modelo", "Versao", "AnoDe", "AnoAte", "IgualPosicao", "Posicao", "MarcaPneu", "IpPir", "IpCam", "Homologado", "Marcado", "PNCS"];
-            const tableCsv = buildCsv(headers, jsonData.Registros);
-            document.getElementById('resCsv').innerText = tableCsv;
+			const headers = ["BU", "Marca", "Modelo", "Versao", "AnoDe", "AnoAte", "IgualPosicao", "Posicao", "MarcaPneu", "IpPir", "IpCam", "Homologado", "Marcado", "PNCS"];
+			const tableCsv = buildCsv(headers, jsonData.Registros);
+			document.getElementById('resCsv').innerText = tableCsv;
+			// Use Monaco Editor para exibir o CSV no elemento resCsv
+			//initializeMonacoEditor('resCsv', tableCsv, 'plaintext');
+		}
+
+        function replaceAccents(text) {
+            const accents = "ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÑñ";
+            const accentsOut = "AAAAAAaaaaaaOOOOOOooooooEEEEeeeeCcIIIIiiiiUUUUuuuuNn";
+            return text.split('').map(char => {
+                const index = accents.indexOf(char);
+                return index !== -1 ? accentsOut[index] : char;
+            }).join('');
         }
-
-        function buildCsv(headers, registros) {
-            let csv = headers.join('|') + '\n';
-
-            registros.forEach(registro => {
-                csv += headers.map(header => getValue(registro, header)).join('|') + '\n';
-            });
-
-            return csv.toString();
-        }
+		
+		<!-- function removeAccents(text) { -->
+			<!-- // Normalizar o texto para decompor caracteres com acentos -->
+			<!-- const decomposed = text.normalize('NFD'); -->
+		
+			<!-- // Remover caracteres diacríticos (acentos) e manter letras correspondentes -->
+			<!-- return decomposed.replace(/[\u0300-\u036f]/g, ''); -->
+		<!-- } -->
+		
+		function buildCsv(headers, registros) {
+			let csv = headers.join('|') + '\n';
+		
+			registros.forEach(registro => {
+				csv += headers.map(header => getValue(registro, header)).join('|') + '\n';
+			});
+		
+			return replaceAccents(csv.toString());
+		}
 
         function getValue(obj, key) {
             const value = deepValue(obj, key);
@@ -138,7 +164,8 @@
 
         function downloadCSV() {
             const csvContent = document.getElementById('resCsv').innerText;
-            const blob = new Blob([csvContent], {
+            //const csvContent = document.querySelector('.view-lines.monaco-mouse-cursor-text').innerText;
+            const blob = new Blob([replaceAccents(csvContent)], {
                 type: 'text/csv;charset=utf-8'
             });
             const link = document.createElement('a');
@@ -152,8 +179,29 @@
         }
 
         function cleanInvalidCharacters(jsonString) {
-            return jsonString.replace(/[^\x20-\x7E]/g, ' ');
+			// Remove apenas caracteres de controle não gráficos, exceto tabulações (9), nova linha (10) e retorno de carro (13)
+            return jsonString.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '');
         }
+		
+		<!-- function cleanInvalidCharacters(jsonString) { -->
+			<!-- // Remove caracteres de controle não gráficos, exceto caracteres com acento -->
+			<!-- return jsonString.replace(/[\x00-\x1F\x7F]/g, ''); -->
+		<!-- } -->
+		
+		<!-- function initializeMonacoEditor(elementId, content, language) { -->
+			<!-- require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs' }}); -->
+			<!-- require(['vs/editor/editor.main'], function() { -->
+				<!-- var editor = monaco.editor.create(document.getElementById(elementId), { -->
+				<!-- value: content, -->
+				<!-- language: language, -->
+				<!-- theme: "vs-dark", -->
+				<!-- automaticLayout: true, -->
+				<!-- lineNumbers: "on", -->
+				<!-- readOnly: true, // Tornar o editor somente leitura -->
+				<!-- wordWrap: 'on' // Habilitar quebra de linha automática -->
+				<!-- }); -->
+			<!-- }); -->
+		<!-- } -->
     </script>
 
 </body>
