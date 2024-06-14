@@ -50,7 +50,7 @@
                 <label for="jsonInput" class="form-label">Cole o JSON aqui:</label>
                 <textarea class="form-control" id="jsonInput" rows="5"></textarea>
             </div>
-
+            
             <!-- Adicionando o campo para carregar um arquivo JSON -->
             <div class="mb-3">
                 <label for="jsonFile" class="form-label">Ou escolha um arquivo JSON:</label>
@@ -110,31 +110,31 @@
             return csv.toString();
         }
 
-        function getValue(obj, key) {
-            const value = deepValue(obj, key);
-            //console.log( 'Value para JSON: ' + JSON.stringify(value));
-
-            if (typeof value === 'boolean') {
-                return value.toString(); // Retorna 'true' ou 'false' como uma string
-            } else if (typeof value === 'object' && value !== null) {
-                return JSON.stringify(value);
-            }
-
-            return value;
-        }
-
+		function getValue(obj, key) {
+			const value = deepValue(obj, key);
+			//console.log( 'Value para JSON: ' + JSON.stringify(value));
+			
+			if (typeof value === 'boolean') {
+				return value.toString(); // Retorna 'true' ou 'false' como uma string
+			} else if (typeof value === 'object' && value !== null) {
+				return JSON.stringify(value);
+			}
+		
+			return value;
+		}
+		
         function deepValue(obj, key) {
             const keys = key.split('.');
-            //console.log('Keys: ' + keys);
+			//console.log('Keys: ' + keys);
             let value = obj;
-            //console.log('Obj: ' + obj);
+			//console.log('Obj: ' + obj);
 
             for (const k of keys) {
                 if (!value || typeof value !== 'object') {
                     return "";
                 }
                 value = value[k].toString();
-                //console.log('Value[k]: ' + value);
+				//console.log('Value[k]: ' + value);
             }
 
             // Aplicar a remoção de letras na coluna "Raio"
@@ -148,7 +148,6 @@
         function removeLetters(str) {
             return str.replace(/[a-zA-Z]/g, '');
         }
-
 
         function downloadCSV() {
             const csvContent = document.getElementById('resCsv').innerText;
@@ -171,4 +170,5 @@
     </script>
 
 </body>
+
 </html>

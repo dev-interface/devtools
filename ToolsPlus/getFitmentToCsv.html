@@ -69,7 +69,7 @@
             <div id="resCsv"></div>
         </div>
         <footer class="footer">
-            <p id="copyright">© Starley Interface 2017 - <span id="anoAtual"></span> | Versão 1.0.2</p>
+            <p id="copyright">© Starley Interface 2017 - <span id="anoAtual"></span> | Versão 1.0.3</p>
         </footer>
     </main>
 	<!-- Adicionando scripts do Monaco Editor -->
@@ -129,11 +129,15 @@
 		function buildCsv(headers, registros) {
 			let csv = headers.join('|') + '\n';
 		
-			registros.forEach(registro => {
-				csv += headers.map(header => getValue(registro, header)).join('|') + '\n';
-			});
-		
-			return replaceAccents(csv.toString());
+            registros.forEach(registro => {
+            const ipCam = getValue(registro, 'IpCam');
+            const ipPir = getValue(registro, 'IpPir');
+            if (ipCam !== "" && ipPir !== "") {
+                csv += headers.map(header => getValue(registro, header)).join('|') + '\n';
+            }
+        });
+
+        return replaceAccents(csv.toString());
 		}
 
         function getValue(obj, key) {
