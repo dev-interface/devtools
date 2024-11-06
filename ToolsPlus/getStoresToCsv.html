@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ptBR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON to CSV Converter (Stores)</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1e1e1e;
+            color: #ffffff;
+            margin-bottom: 150px;
+        }
+
+        .footer {
+            text-align: center;
+            position: absolute;
+            bottom: auto;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            line-height: 100px;
+            background-color: rgba(0, 0, 0, 0.1);
+            color: #fff;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        #resCsv {
+            margin-top: 20px;
+            background-color: #1e1e1e;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            overflow: auto;
+        }
+    </style>
+</head>
+
+<body class="bg-dark text-light">
+    <main class="main">
+        <div class="container">
+            <h2 class="mb-4">JSON to CSV Converter (Stores)</h2>
+
+            <div class="mb-3">
+                <label for="jsonInput" class="form-label">Cole o JSON aqui:</label>
+                <textarea class="form-control" id="jsonInput" rows="5"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="jsonFile" class="form-label">Ou escolha um arquivo JSON:</label>
+                <input type="file" class="form-control" id="jsonFile" accept=".json">
+            </div>
+
+            <button class="btn btn-primary mb-3" onclick="generateTable()">Gerar</button>
+            <button class="btn btn-success mb-3" onclick="downloadCSV()">Download</button>
+            <button class="btn btn-danger mb-3" onclick="clearTable()">Limpar</button>
+
+            <div id="resCsv"></div>
+        </div>
+        <footer class="footer">
+            <p>© 2024</p>
+        </footer>
+    </main>
+
+    <script>
+        async function generateTable() {
+            const jsonInput = document.getElementById('jsonInput').value;
+            const jsonFile = document.getElementById('jsonFile').files[0];
+            let jsonData = {};
+
+            if (jsonInput.trim() !== '') {
+                jsonData = JSON.parse(jsonInput);
+                await generateCsv(jsonData);
+            } else if (jsonFile) {
+                const reader = new FileReader();
+                reader.onload = async function (e) {
+                    const textDecoder = new TextDecoder("windows-1252"); // ANSI (Windows-1252) encoding
+                    const decodedData = textDecoder.decode(e.target.result);
+                    jsonData = JSON.parse(decodedData);
+                    await generateCsv(jsonData);
+                };
+                reader.readAsArrayBuffer(jsonFile);
+                return;
+            } else {
+                alert('Por favor, cole o JSON ou selecione um arquivo.');
+                return;
+            }
+        }
+
+        async function generateCsv(jsonData) {
+            const stores = jsonData.stores || [];
+            if (!stores.length) {
+                document.getElementById('resCsv').innerText = "Nenhum dado encontrado!";
+                return;
+            }
+
+            // Filtrar lojas inativas
+            const activeStores = stores.filter(store => store.status !== "INATIVA");
+
+            if (!activeStores.length) {
+                document.getElementById('resCsv').innerText = "Nenhuma loja ativa encontrada!";
+                return;
+            }
+
+            // Adicionar 'cityCode' ao final dos headers
+            const headers = Object.keys(activeStores[0]);
+            headers.push('cityCode');
+
+            // Converter headers para maiúsculas e usar '|' como separador
+            const headerRow = headers.map(header => header.toUpperCase()).join("|") + "\n";
+
+            // Processar cada loja
+            const rows = await Promise.all(activeStores.map(async store => {
+                // Definir 'false' para campos vazios específicos
+                store.truckCenter = store.truckCenter || false;
+                store.carCenter = store.carCenter || false;
+                store.motoCenter = store.motoCenter || false;
+                store.armorShop = store.armorShop || false;
+
+                // Obter 'cityCode' via API do ViaCEP
+                const cityCode = await fetchCityCode(store.postalCode);
+
+                // Adicionar 'cityCode' ao objeto da loja
+                store.cityCode = cityCode;
+
+                // Gerar linha CSV
+                return headers.map(field => `${store[field] || ""}`).join("|");
+            }));
+
+            const csvContent = headerRow + rows.join("\n");
+            document.getElementById('resCsv').innerText = csvContent;
+        }
+
+        async function fetchCityCode(postalCode) {
+            if (!postalCode) return "";
+            const cleanedPostalCode = postalCode.replace(/\D/g, ''); // Remover caracteres não numéricos
+            if (!cleanedPostalCode) return "";
+            try {
+                const response = await fetch(`https://viacep.com.br/ws/${cleanedPostalCode}/json/`);
+                if (!response.ok) throw new Error("Erro ao buscar o CEP");
+                const data = await response.json();
+                return data.ibge || "";
+            } catch (error) {
+                console.error("Erro ao obter o código IBGE:", error);
+                return "";
+            }
+        }
+
+        function downloadCSV() {
+            const csvContent = document.getElementById('resCsv').innerText;
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = 'stores.csv';
+            link.click();
+        }
+
+        function clearTable() {
+            document.getElementById('resCsv').innerText = '';
+            document.getElementById('jsonInput').value = '';
+            document.getElementById('jsonFile').value = '';
+        }
+    </script>
+
+</body>
+
+</html>
