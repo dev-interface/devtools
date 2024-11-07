@@ -62,11 +62,13 @@
             <div id="resCsv"></div>
         </div>
         <footer class="footer">
-            <p>© 2024</p>
+            <p id="copyright">© Starley Interface 2017 - <span id="anoAtual"></span> | Versão 1.0.0</p>
         </footer>
     </main>
 
     <script>
+        var anoAtual = new Date().getFullYear();
+        document.getElementById('anoAtual').innerHTML = anoAtual;
         async function generateTable() {
             const jsonInput = document.getElementById('jsonInput').value;
             const jsonFile = document.getElementById('jsonFile').files[0];
