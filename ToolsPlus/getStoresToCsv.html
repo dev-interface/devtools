@@ -129,8 +129,11 @@
                 // Adicionar 'cityCode' ao objeto da loja
                 store.cityCode = cityCode;
 
-                // Gerar linha CSV
-                return headers.map(field => `${store[field] || ""}`).join("|");
+                // Gerar linha CSV, garantindo que 'false' seja mantido como string
+                return headers.map(field => {
+                    const value = store[field];
+                    return value === false ? "false" : (value || "");
+                }).join("|");
             }));
 
             const csvContent = headerRow + rows.join("\n");
