@@ -116,10 +116,10 @@
             // Processar cada loja
             const rows = await Promise.all(activeStores.map(async store => {
                 // Definir 'false' para campos vazios específicos
-                store.truckCenter = store.truckCenter !== undefined && store.truckCenter !== null ? store.truckCenter : false;
-                store.carCenter = store.carCenter !== undefined && store.carCenter !== null ? store.carCenter : false;
-                store.motoCenter = store.motoCenter !== undefined && store.motoCenter !== null ? store.motoCenter : false;
-                store.armorShop = store.armorShop !== undefined && store.armorShop !== null ? store.armorShop : false;  
+                store.truckCenter = store.truckCenter !== ' ' && store.truckCenter !== undefined && store.truckCenter !== null ? store.truckCenter : false;
+                store.carCenter = store.carCenter !== ' ' && store.carCenter !== undefined && store.carCenter !== null ? store.carCenter : false;
+                store.motoCenter = store.motoCenter !== ' ' && store.motoCenter !== undefined && store.motoCenter !== null ? store.motoCenter : false;
+                store.armorShop = store.armorShop !== ' ' && store.armorShop !== undefined && store.armorShop !== null ? store.armorShop : false;  
 
                 // Obter 'cityCode' via API do ViaCEP
                 const cityCode = await fetchCityCode(store.postalCode);
