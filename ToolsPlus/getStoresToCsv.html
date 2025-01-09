@@ -62,13 +62,14 @@
             <div id="resCsv"></div>
         </div>
         <footer class="footer">
-            <p id="copyright">© Starley Interface 2017 - <span id="anoAtual"></span> | Versão 1.0.0</p>
+            <p id="copyright">© Starley Interface 2017 - <span id="anoAtual"></span> | Versão 2.0.0</p>
         </footer>
     </main>
 
     <script>
         var anoAtual = new Date().getFullYear();
         document.getElementById('anoAtual').innerHTML = anoAtual;
+
         async function generateTable() {
             const jsonInput = document.getElementById('jsonInput').value;
             const jsonFile = document.getElementById('jsonFile').files[0];
@@ -108,12 +109,16 @@
                 return;
             }
 
-            // Adicionar 'cityCode' ao final dos headers
-            const headers = Object.keys(activeStores[0]);
-            headers.push('cityCode');
+            // Definir a ordem desejada das colunas. Removida a coluna "armorShop", se quiser é só adicionar o cabeçalho novamente.
+            const headers = [
+                "branch", "dealer", "name", "address", "complement", "neighborhood", "city",
+                "state", "postalCode", "telephone", "whatsapp", "openingHours", "regional", "status",
+                "latitude", "longitude", "carCenter", "truckCenter", "motoCenter", "type", "cityCode"
+            ];
 
-            // Converter headers para maiúsculas e usar '|' como separador
-            const headerRow = headers.map(header => header.toUpperCase()).join("|") + "\n";
+            // Converter headers para maiúsculas, exceto 'cityCode', e usar '|' como separador
+			const headerRow = headers.map(header => header === "cityCode" ? header : header.toUpperCase()).join("|") + "\n";
+
 
             // Processar cada loja
             const rows = await Promise.all(activeStores.map(async store => {
@@ -121,10 +126,10 @@
                 store.truckCenter = store.truckCenter !== ' ' && store.truckCenter !== undefined && store.truckCenter !== null ? store.truckCenter : false;
                 store.carCenter = store.carCenter !== ' ' && store.carCenter !== undefined && store.carCenter !== null ? store.carCenter : false;
                 store.motoCenter = store.motoCenter !== ' ' && store.motoCenter !== undefined && store.motoCenter !== null ? store.motoCenter : false;
-                store.armorShop = store.armorShop !== ' ' && store.armorShop !== undefined && store.armorShop !== null ? store.armorShop : false;  
+                store.armorShop = store.armorShop !== ' ' && store.armorShop !== undefined && store.armorShop !== null ? store.armorShop : false;
 
                 // Obter 'cityCode' via API do ViaCEP
-                const cityCode = await fetchCityCode(store.postalCode);
+                const cityCode = await fetchCityCode(store.postalCode, store.state, store.city, store.address);
 
                 // Adicionar 'cityCode' ao objeto da loja
                 store.cityCode = cityCode;
@@ -140,27 +145,67 @@
             document.getElementById('resCsv').innerText = csvContent;
         }
 
-        async function fetchCityCode(postalCode) {
-            if (!postalCode) return "";
-            const cleanedPostalCode = postalCode.replace(/\D/g, ''); // Remover caracteres não numéricos
-            if (!cleanedPostalCode) return "";
-            try {
-                const response = await fetch(`https://viacep.com.br/ws/${cleanedPostalCode}/json/`);
-                if (!response.ok) throw new Error("Erro ao buscar o CEP");
-                const data = await response.json();
-                return data.ibge || "";
-            } catch (error) {
-                console.error("Erro ao obter o código IBGE:", error);
-                return "";
-            }
-        }
+        async function fetchCityCode(postalCode, state, city, address) {
+			// Limpar o endereço para extrair a primeira parte apenas
+			
+			const addressAux = address
+				.split(",", 1)[0]
+				.replace(/\b(AV|AVENIDA|RUA|SEN)\b/gi, '')
+				.replace(/\./g, '') // Remove apenas pontos
+				.trim(); // Remove espaços extras no final
+			// Remove apenas pontos;
+			const addressParts = addressAux.split(" ");
+
+			const cleanedAddress = 
+				(addressParts[0] ? addressParts[0] + " " : "") +
+				(addressParts[1] ? addressParts[1] : "");
+
+
+			if (!postalCode) return "0000000";
+			const cleanedPostalCode = postalCode.replace(/\D/g, ''); // Remover caracteres não numéricos
+
+			// Primeira tentativa: buscar pelo código postal
+			try {
+				const urlCep = `https://viacep.com.br/ws/${cleanedPostalCode}/json/`;
+				console.log(urlCep);
+				const response = await fetch(urlCep);
+				if (response.ok) {
+					const data = await response.json();
+					if (data && data.ibge) {
+						return data.ibge;
+					}
+				}
+				// Se a primeira requisição falhar ou não retornar o IBGE, tenta a segunda opção
+			} catch (error) {
+				console.error("Erro ao buscar o CEP na primeira tentativa:", error);
+			}
+
+			// Segunda tentativa: buscar usando estado, cidade e endereço
+			try {
+				const urlAddress = `https://viacep.com.br/ws/${state}/${city}/${cleanedAddress}/json/`;
+				console.log(urlAddress);
+				const response = await fetch(urlAddress);
+				if (response.ok) {
+					const data = await response.json();
+					if (Array.isArray(data) && data.length > 0) {
+						return data[0].ibge || "0000000"; // Pega o IBGE do primeiro item, se disponível
+					}
+				}
+			} catch (error) {
+				console.error("Erro ao buscar o CEP na segunda tentativa:", error);
+			}
+
+			// Se ambas as tentativas falharem ou não houver resultado, retorna "0000000"
+			return "0000000";
+		}
+
 
         function downloadCSV() {
             const csvContent = document.getElementById('resCsv').innerText;
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
             const link = document.createElement('a');
             link.href = window.URL.createObjectURL(blob);
-            link.download = 'filial.csv';
+            link.download = 'stores.csv';
             link.click();
         }
 
